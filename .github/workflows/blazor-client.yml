@@ -119,18 +119,23 @@ jobs:
         path: gitops
         token: ${{ secrets.GITOPS_REPO_TOKEN }} 
 
-    - uses: peterjgrainger/action-create-branch@v2.2.0
-      name: 'Create pr branch'
-      env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-      with:
-       branch: pr-${{ github.run_number }}
-       sha: '${{ github.event.pull_request.head.sha }}'
+    # - uses: peterjgrainger/action-create-branch@v2.2.0
+    #   name: 'Create pr branch'
+    #   env:
+    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+    #   with:
+    #    branch: pr-${{ github.run_number }}
+    #    sha: '${{ github.event.pull_request.head.sha }}'
+
+    - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git checkout -b feature/pr-${{ github.run_number }}
  
-    - uses: actions/checkout@v3
-      name: 'Checkout pr branch'
-      with:
-       ref: pr-${{ github.run_number }}
+    # - uses: actions/checkout@v3
+    #   name: 'Checkout pr branch'
+    #   with:
+    #    ref: pr-${{ github.run_number }}
 
     - name: Update Image Version in the related HelmChart values.yaml
       uses: fjogeleit/yaml-update-action@main
@@ -139,7 +144,7 @@ jobs:
         propertyPath: 'blazorclient.image.tag'
         value: 1.0.${{ github.run_number }}
         repository: ${{ secrets.GITOPS_REPOSITORY }}
-        branch: pr-${{ github.run_number }}
+        branch: feature/pr-${{ github.run_number }}
         targetBranch: main
         createPR: true
         message: 'Update Image Version to 1.0.${{ github.run_number }}'
