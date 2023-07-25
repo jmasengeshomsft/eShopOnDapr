@@ -82,13 +82,20 @@ jobs:
           docker version -f '{{.Client.Experimental}}'
           docker version -f '{{.Server.Experimental}}'
 
-    - name: Login to Container Registry
-      uses: docker/login-action@v1
+#     - name: Login to Container Registry
+#       uses: docker/login-action@v1
+#       with:
+#         registry: ${{ inputs.REGISTRY_ENDPOINT }}
+#         username: ${{ secrets.USERNAME }}
+#         password: ${{ secrets.PASSWORD }}
+        
+    - name: 'Build and push image'
+      uses: azure/docker-login@v1
       with:
-        registry: ${{ inputs.REGISTRY_ENDPOINT }}
+        login-server: ${{ secrets.REGISTRY_ENDPOINT }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-
+ 
     - name: Compose build ${{ env.SERVICE }}
       run: sudo -E docker-compose build ${{ env.SERVICE }}
       working-directory: ./src
