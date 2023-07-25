@@ -116,6 +116,7 @@ jobs:
         repository: ${{ secrets.GITOPS_REPOSITORY }}
         # path: infrastructure
         token: ${{ secrets.GITHUB_TOKEN }} 
+        ref: test-pr
 
     - name: Update Image Version in the related HelmChart values.yaml
       uses: fjogeleit/yaml-update-action@main
