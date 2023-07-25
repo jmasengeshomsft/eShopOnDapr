@@ -54,12 +54,12 @@ jobs:
 #         TAG: ${{ env.BRANCH }}
 #         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
 
-#   BuildLinux:
-#     runs-on: ubuntu-latest
-#     if: ${{ github.event_name != 'pull_request' }}
-#     steps:
-#     - name: 'Checkout Github Action'
-#       uses: actions/checkout@master
+  BuildLinux:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' }}
+    steps:
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
 
 #     - name: Setup dotnet
 #       uses: actions/setup-dotnet@v1
