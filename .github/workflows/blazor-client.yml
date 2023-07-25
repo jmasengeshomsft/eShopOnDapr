@@ -40,82 +40,82 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
 
-    - name: Build
-      run: |
-        dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
-        cd src/Web/BlazorClient.Host
-        dotnet build --no-restore
+#     - name: Build
+#       run: |
+#         dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
+#         cd src/Web/BlazorClient.Host
+#         dotnet build --no-restore
 
-    - name: Compose build ${{ env.SERVICE }}
-      run: sudo -E docker-compose build ${{ env.SERVICE }}
-      working-directory: ./src
-      shell: bash
-      env:
-        TAG: ${{ env.BRANCH }}
-        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+#     - name: Compose build ${{ env.SERVICE }}
+#       run: sudo -E docker-compose build ${{ env.SERVICE }}
+#       working-directory: ./src
+#       shell: bash
+#       env:
+#         TAG: ${{ env.BRANCH }}
+#         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
 
-  BuildLinux:
-    runs-on: ubuntu-latest
-    if: ${{ github.event_name != 'pull_request' }}
-    steps:
-    - name: 'Checkout Github Action'
-      uses: actions/checkout@master
+#   BuildLinux:
+#     runs-on: ubuntu-latest
+#     if: ${{ github.event_name != 'pull_request' }}
+#     steps:
+#     - name: 'Checkout Github Action'
+#       uses: actions/checkout@master
 
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }}
-        include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
-
-    - name: Build
-      run: |
-        dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
-        cd src/Web/BlazorClient.Host
-        dotnet build --no-restore
-
-    - name: Enable experimental features for the Docker daemon and CLI
-      run: |
-          echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
-          mkdir -p ~/.docker
-          echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
-          sudo service docker restart
-          docker version -f '{{.Client.Experimental}}'
-          docker version -f '{{.Server.Experimental}}'
-
-#     - name: Login to Container Registry
-#       uses: docker/login-action@v1
+#     - name: Setup dotnet
+#       uses: actions/setup-dotnet@v1
 #       with:
-#         registry: ${{ inputs.REGISTRY_ENDPOINT }}
+#         dotnet-version: ${{ env.DOTNET_VERSION }}
+#         include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
+
+#     - name: Build
+#       run: |
+#         dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
+#         cd src/Web/BlazorClient.Host
+#         dotnet build --no-restore
+
+#     - name: Enable experimental features for the Docker daemon and CLI
+#       run: |
+#           echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+#           mkdir -p ~/.docker
+#           echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
+#           sudo service docker restart
+#           docker version -f '{{.Client.Experimental}}'
+#           docker version -f '{{.Server.Experimental}}'
+
+# #     - name: Login to Container Registry
+# #       uses: docker/login-action@v1
+# #       with:
+# #         registry: ${{ inputs.REGISTRY_ENDPOINT }}
+# #         username: ${{ secrets.USERNAME }}
+# #         password: ${{ secrets.PASSWORD }}
+        
+#     - name: 'Login to ACR'
+#       uses: azure/docker-login@v1
+#       with:
+#         login-server: ${{ secrets.REGISTRY_ENDPOINT }}
 #         username: ${{ secrets.USERNAME }}
 #         password: ${{ secrets.PASSWORD }}
-        
-    - name: 'Login to ACR'
-      uses: azure/docker-login@v1
-      with:
-        login-server: ${{ secrets.REGISTRY_ENDPOINT }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
  
-    - name: Compose build ${{ env.SERVICE }}
-      run: sudo -E docker-compose build ${{ env.SERVICE }}
-      working-directory: ./src
-      shell: bash
-      env:
-        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+#     - name: Compose build ${{ env.SERVICE }}
+#       run: sudo -E docker-compose build ${{ env.SERVICE }}
+#       working-directory: ./src
+#       shell: bash
+#       env:
+#         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
 
-    - name: Compose push ${{ env.SERVICE }}
-      run: sudo -E docker-compose push ${{ env.SERVICE }}
-      working-directory: ./src
-      shell: bash
-      env:
-        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+#     - name: Compose push ${{ env.SERVICE }}
+#       run: sudo -E docker-compose push ${{ env.SERVICE }}
+#       working-directory: ./src
+#       shell: bash
+#       env:
+#         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
 
     - name: Checkout Target Repository
       uses: actions/checkout@v3
       with:
         repository: ${{ secrets.GITOPS_REPOSITORY }}
         path: gitops
-        token: ${{ secrets.GITHUB_TOKEN }} 
+        token: ${{ secrets.GITOPS_REPO_TOKEN }} 
 
     - name: Update Image Version in the related HelmChart values.yaml
       uses: fjogeleit/yaml-update-action@main
