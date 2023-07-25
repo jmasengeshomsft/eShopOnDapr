@@ -89,7 +89,7 @@ jobs:
 #         username: ${{ secrets.USERNAME }}
 #         password: ${{ secrets.PASSWORD }}
         
-    - name: 'Build and push image'
+    - name: 'Login to ACR'
       uses: azure/docker-login@v1
       with:
         login-server: ${{ secrets.REGISTRY_ENDPOINT }}
@@ -109,3 +109,24 @@ jobs:
       shell: bash
       env:
         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+
+    - name: Checkout Target Repository
+      uses: actions/checkout@v3
+      with:
+        repository: ${{ secrets.GITOPS_REPOSITORY }}
+        # path: infrastructure
+        token: ${{ secrets.GITHUB_TOKEN }} 
+
+    - name: Update Image Version in the related HelmChart values.yaml
+      uses: fjogeleit/yaml-update-action@main
+      with:
+        valueFile: 'dev/eshop-values.yaml'
+        propertyPath: 'blazorclient.image.tag'
+        value: ${{ github.run_number }}
+        repository: ${{ secrets.GITOPS_REPOSITORY }}
+        branch: main
+        targetBranch: test-pr
+        createPR: true
+        message: 'Update Image Version to ${{ steps.image.outputs.version }}'
+        token: ${{ secrets.GITHUB_TOKEN }}
+        # workDir: infrastructure
