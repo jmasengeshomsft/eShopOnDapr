@@ -114,9 +114,8 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: ${{ secrets.GITOPS_REPOSITORY }}
-        # path: infrastructure
+        path: gitops
         token: ${{ secrets.GITHUB_TOKEN }} 
-        ref: test-pr
 
     - name: Update Image Version in the related HelmChart values.yaml
       uses: fjogeleit/yaml-update-action@main
@@ -130,4 +129,4 @@ jobs:
         createPR: true
         message: 'Update Image Version to ${{ steps.image.outputs.version }}'
         token: ${{ secrets.GITHUB_TOKEN }}
-        # workDir: infrastructure
+        workDir: gitops
