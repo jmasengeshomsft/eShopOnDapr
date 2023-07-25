@@ -122,7 +122,7 @@ jobs:
     - uses: peterjgrainger/action-create-branch@v2.2.0
       name: 'Create pr branch'
       env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       GITHUB_TOKEN: ${{ secrets.GITOPS_REPO_TOKEN }}
       with:
        branch: pr-${{ github.run_number }}
       #  sha: '${{ github.event.pull_request.head.sha }}'
