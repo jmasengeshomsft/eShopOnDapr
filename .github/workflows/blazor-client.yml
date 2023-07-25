@@ -127,6 +127,6 @@ jobs:
         branch: main
         targetBranch: test-pr
         createPR: true
-        message: 'Update Image Version to ${{ steps.image.outputs.version }}'
+        message: 'Update Image Version to ${{ github.run_number }}'
         token: ${{ secrets.GITOPS_REPO_TOKEN }}
         workDir: gitops
