@@ -132,6 +132,7 @@ jobs:
       name: 'Checkout pr branch'
       with:
        ref: pr-${{ github.run_number }}
+       path: gitops
 
     - name: Update Image Version in the related HelmChart values.yaml
       uses: fjogeleit/yaml-update-action@main
