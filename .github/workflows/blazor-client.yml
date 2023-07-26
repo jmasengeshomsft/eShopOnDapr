@@ -118,21 +118,20 @@ jobs:
       with:
         repository: ${{ secrets.GITOPS_REPOSITORY }}
         path: gitops
-        token: ${{ secrets.GITOPS_REPO_TOKEN }}
-        ref: pr-${{ github.run_number }}
+        token: ${{ secrets.GITOPS_REPO_TOKEN }} 
 
-    # - uses: peterjgrainger/action-create-branch@v2.2.0
-    #   name: 'Create pr branch'
-    #   env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
-    #   with:
-    #    branch: pr-${{ github.run_number }}
-    #   #  sha: '${{ github.event.pull_request.head.sha }}'
+    - uses: peterjgrainger/action-create-branch@v2.2.0
+      name: 'Create pr branch'
+      env:
+       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+      with:
+       branch: pr-${{ github.run_number }}
+       sha: '${{ github.event.pull_request.head.sha }}'
  
-    # - uses: actions/checkout@v3
-    #   name: 'Checkout pr branch'
-    #   with:
-    #    ref: pr-${{ github.run_number }}
+    - uses: actions/checkout@v3
+      name: 'Checkout pr branch'
+      with:
+       ref: pr-${{ github.run_number }}
 
     - name: Update Image Version in the related HelmChart values.yaml
       uses: fjogeleit/yaml-update-action@main
