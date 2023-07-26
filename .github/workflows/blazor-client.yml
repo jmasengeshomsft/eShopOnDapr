@@ -140,9 +140,9 @@ jobs:
         propertyPath: 'blazorclient.image.tag'
         value: 1.0.${{ github.run_number }}
         repository: ${{ secrets.GITOPS_REPOSITORY }}
-        branch: main # pr-${{ github.run_number }}
+        branch: pr-${{ github.run_number }}
         targetBranch: main
-        createPR: false
+        createPR: true
         message: 'Update Image Version to 1.0.${{ github.run_number }}'
         token: ${{ secrets.GITOPS_REPO_TOKEN }}
         workDir: gitops
