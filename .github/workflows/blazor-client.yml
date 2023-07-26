@@ -61,26 +61,26 @@ jobs:
     - name: 'Checkout Github Action'
       uses: actions/checkout@master
 
-#     - name: Setup dotnet
-#       uses: actions/setup-dotnet@v1
-#       with:
-#         dotnet-version: ${{ env.DOTNET_VERSION }}
-#         include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
 
-#     - name: Build
-#       run: |
-#         dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
-#         cd src/Web/BlazorClient.Host
-#         dotnet build --no-restore
+    - name: Build
+      run: |
+        dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
+        cd src/Web/BlazorClient.Host
+        dotnet build --no-restore
 
-#     - name: Enable experimental features for the Docker daemon and CLI
-#       run: |
-#           echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
-#           mkdir -p ~/.docker
-#           echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
-#           sudo service docker restart
-#           docker version -f '{{.Client.Experimental}}'
-#           docker version -f '{{.Server.Experimental}}'
+    - name: Enable experimental features for the Docker daemon and CLI
+      run: |
+          echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+          mkdir -p ~/.docker
+          echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
+          sudo service docker restart
+          docker version -f '{{.Client.Experimental}}'
+          docker version -f '{{.Server.Experimental}}'
 
 # # #     - name: Login to Container Registry
 # # #       uses: docker/login-action@v1
@@ -89,28 +89,28 @@ jobs:
 # # #         username: ${{ secrets.USERNAME }}
 # # #         password: ${{ secrets.PASSWORD }}
         
-#     - name: 'Login to ACR'
-#       uses: azure/docker-login@v1
-#       with:
-#         login-server: ${{ secrets.REGISTRY_ENDPOINT }}
-#         username: ${{ secrets.USERNAME }}
-#         password: ${{ secrets.PASSWORD }}
+    - name: 'Login to ACR'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_ENDPOINT }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
  
-#     - name: Compose build ${{ env.SERVICE }}
-#       run: sudo -E docker-compose build ${{ env.SERVICE }}
-#       working-directory: ./src
-#       shell: bash
-#       env:
-#         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
-#         TAG: 1.0.${{ github.run_number }}
+    - name: Compose build ${{ env.SERVICE }}
+      run: sudo -E docker-compose build ${{ env.SERVICE }}
+      working-directory: ./src
+      shell: bash
+      env:
+        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+        TAG: 1.0.${{ github.run_number }}
 
-#     - name: Compose push ${{ env.SERVICE }}
-#       run: sudo -E docker-compose push ${{ env.SERVICE }}
-#       working-directory: ./src
-#       shell: bash
-#       env:
-#         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
-#         TAG: 1.0.${{ github.run_number }}
+    - name: Compose push ${{ env.SERVICE }}
+      run: sudo -E docker-compose push ${{ env.SERVICE }}
+      working-directory: ./src
+      shell: bash
+      env:
+        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+        TAG: 1.0.${{ github.run_number }}
 
 
     - name: Checkout Target Repository
