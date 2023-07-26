@@ -112,6 +112,14 @@ jobs:
 #         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
 #         TAG: 1.0.${{ github.run_number }}
 
+    - uses: peterjgrainger/action-create-branch@v2.2.0
+      name: 'Create pr branch'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
+      with:
+       branch: pr-${{ github.run_number }}
+      #  sha: '${{ github.event.pull_request.head.sha }}'
+
     - name: Checkout Target Repository
       uses: actions/checkout@v3
       with:
