@@ -1,4 +1,6 @@
 ﻿// Only use in this file to avoid conflicts with Microsoft.Extensions.Logging
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
 
 namespace Microsoft.eShopOnDapr.Services.Basket.API;
@@ -67,6 +69,12 @@ public static class ProgramExtensions
         builder.Services.AddControllers().AddDapr();
     }
 
+    public static void AddApplicationInsightsTelemetry(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddApplicationInsightsTelemetry();
+        builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
+    }
+
     public static void AddCustomAuthentication(this WebApplicationBuilder builder)
     {
         // Prevent mapping "sub" claim to nameidentifier.
@@ -109,5 +117,19 @@ public static class ProgramExtensions
         builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         builder.Services.AddScoped<IBasketRepository, DaprBasketRepository>();
         builder.Services.AddScoped<IIdentityService, IdentityService>();
+    }
+}
+
+
+public class MyTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
+        {
+            //set custom role name here
+            telemetry.Context.Cloud.RoleName = "Basket-API";
+            telemetry.Context.Cloud.RoleInstance = "Basket-API";
+        }
     }
 }

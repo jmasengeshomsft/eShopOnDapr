@@ -1,4 +1,6 @@
 ﻿// Only use in this file to avoid conflicts with Microsoft.Extensions.Logging
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
 
 namespace Microsoft.eShopOnDapr.Services.Ordering.API;
@@ -82,6 +84,12 @@ public static class ProgramExtensions
             });
     }
 
+    public static void AddApplicationInsightsTelemetry(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddApplicationInsightsTelemetry();
+        builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
+    }
+
     public static void AddCustomAuthorization(this WebApplicationBuilder builder)
     {
         builder.Services.AddAuthorization(options =>
@@ -153,5 +161,18 @@ public static class ProgramExtensions
         }
 
         return Policy.NoOp();
+    }
+}
+
+public class MyTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
+        {
+            //set custom role name here
+            telemetry.Context.Cloud.RoleName = "Ordering-API";
+            telemetry.Context.Cloud.RoleInstance = "Ordering-API";
+        }
     }
 }

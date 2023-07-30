@@ -47,6 +47,7 @@ services:
       - IdentityUrl=http://identity-api
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqServerUrl=http://seq
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=<value>
     ports:
       - "5103:80"
       - "50001:50001"
@@ -78,6 +79,7 @@ services:
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - RetryMigrations=true
       - SeqServerUrl=http://seq
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=<value>
     ports:
       - "5101:80"
       - "50002:50001"
@@ -104,6 +106,7 @@ services:
       - BasketApiUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5103
       - OrderingApiUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5102
       - ShoppingAggregatorApiUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5121
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=<value>
     ports:
       - "5105:80"
       - "50009:50001"
@@ -128,6 +131,7 @@ services:
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - RetryMigrations=true
       - SeqServerUrl=http://seq
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=<value>
     ports:
       - "5102:80"
       - "50003:50001"
@@ -150,6 +154,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - SeqServerUrl=http://seq
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=<value>
     ports:
       - "5108:80"
       - "50006:50001"

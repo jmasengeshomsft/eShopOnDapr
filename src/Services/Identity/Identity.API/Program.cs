@@ -2,6 +2,7 @@
 var builder = WebApplication.CreateBuilder();
 
 builder.AddCustomConfiguration();
+builder.AddApplicationInsightsTelemetry();
 builder.AddCustomSerilog();
 builder.AddCustomMvc();
 builder.AddCustomDatabase();

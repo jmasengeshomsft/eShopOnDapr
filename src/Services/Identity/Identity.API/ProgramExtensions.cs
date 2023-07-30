@@ -1,4 +1,6 @@
-﻿using Serilog;
+﻿using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
+using Serilog;
 
 namespace Microsoft.eShopOnDapr.Services.Identity.API;
 
@@ -42,6 +44,11 @@ public static class ProgramExtensions
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
     }
+    public static void AddApplicationInsightsTelemetry(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddApplicationInsightsTelemetry();
+        builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
+    }
 
     public static void AddCustomIdentityServer(this WebApplicationBuilder builder)
     {
@@ -82,5 +89,18 @@ public static class ProgramExtensions
     public static void AddCustomApplicationServices(this WebApplicationBuilder builder)
     {
         builder.Services.AddTransient<IProfileService, ProfileService>();
+    }
+}
+
+public class MyTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
+        {
+            //set custom role name here
+            telemetry.Context.Cloud.RoleName = "Identity-API";
+            telemetry.Context.Cloud.RoleInstance = "Identity-API";
+        }
     }
 }

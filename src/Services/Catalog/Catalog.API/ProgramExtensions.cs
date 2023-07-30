@@ -1,4 +1,6 @@
 ﻿// Only use in this file to avoid conflicts with Microsoft.Extensions.Logging
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
 
 namespace Microsoft.eShopOnDapr.Services.Catalog.API;
@@ -42,6 +44,13 @@ public static class ProgramExtensions
             c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{AppName} V1");
         });
     }
+
+    public static void AddApplicationInsightsTelemetry(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddApplicationInsightsTelemetry();
+        builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
+    }
+        
 
     public static void AddCustomHealthChecks(this WebApplicationBuilder builder) =>
         builder.Services.AddHealthChecks()
@@ -103,5 +112,19 @@ public static class ProgramExtensions
         }
 
         return Policy.NoOp();
+    }
+}
+
+
+public class MyTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
+        {
+            //set custom role name here
+            telemetry.Context.Cloud.RoleName = "Catalog-API";
+            telemetry.Context.Cloud.RoleInstance = "Catalog-API";
+        }
     }
 }

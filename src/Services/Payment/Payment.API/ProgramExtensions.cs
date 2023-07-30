@@ -1,4 +1,6 @@
 ﻿// Only use in this file to avoid conflicts with Microsoft.Extensions.Logging
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
 
 namespace Microsoft.eShopOnDapr.Services.Payment.API;
@@ -26,6 +28,11 @@ public static class ProgramExtensions
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = $"eShopOnDapr - {AppName}", Version = "v1" });
         });
+    public static void AddApplicationInsightsTelemetry(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddApplicationInsightsTelemetry();
+        builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
+    }
 
     public static void UseCustomSwagger(this WebApplication app)
     {
@@ -47,5 +54,18 @@ public static class ProgramExtensions
 
         builder.Services.AddScoped<IEventBus, DaprEventBus>();
         builder.Services.AddScoped<OrderStatusChangedToValidatedIntegrationEventHandler>();
+    }
+}
+
+public class MyTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
+        {
+            //set custom role name here
+            telemetry.Context.Cloud.RoleName = "Payment-API";
+            telemetry.Context.Cloud.RoleInstance = "Payment-API";
+        }
     }
 }
