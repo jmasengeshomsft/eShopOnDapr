@@ -1,4 +1,6 @@
 // Only use in this file to avoid conflicts with Microsoft.Extensions.Logging
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
 
 namespace Microsoft.eShopOnDapr.Web.Shopping.HttpAggregator;
@@ -61,6 +63,12 @@ public static class ProgramExtensions
         });
     }
 
+    public static void AddApplicationInsightsTelemetry(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddApplicationInsightsTelemetry();
+        builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
+    }
+
     public static void AddCustomAuthentication(this WebApplicationBuilder builder)
     {
         // Prevent mapping "sub" claim to nameidentifier.
@@ -102,6 +110,19 @@ public static class ProgramExtensions
 
         builder.Services.AddSingleton<ICatalogService, CatalogService>(
             _ => new CatalogService(DaprClient.CreateInvokeHttpClient("catalog-api")));
+    }
+}
+
+public class MyTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
+        {
+            //set custom role name here
+            telemetry.Context.Cloud.RoleName = "Identity-API";
+            telemetry.Context.Cloud.RoleInstance = "Identity-API";
+        }
     }
 }
 
