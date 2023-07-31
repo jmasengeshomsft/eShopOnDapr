@@ -120,8 +120,8 @@ public class MyTelemetryInitializer : ITelemetryInitializer
         if (string.IsNullOrEmpty(telemetry.Context.Cloud.RoleName))
         {
             //set custom role name here
-            telemetry.Context.Cloud.RoleName = "Identity-API";
-            telemetry.Context.Cloud.RoleInstance = "Identity-API";
+            telemetry.Context.Cloud.RoleName = "Web Aggregator";
+            telemetry.Context.Cloud.RoleInstance = "Web Aggregator";
         }
     }
 }
