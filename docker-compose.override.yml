@@ -68,6 +68,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://0.0.0.0:80
       - ApiGatewayUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5202
+      - ApiGatewayType=Envoy
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqServerUrl=http://seq
     ports:
@@ -235,6 +236,13 @@ services:
       - HealthChecksUI__HealthChecks__6__Uri=http://blazor-client/hc
     ports:
       - "5107:80"
+
+  apim-shg:
+    env_file: 
+    - apim-shg.conf
+    ports:
+      - "5199:8080"
+      - "5200:8081"
 
   dapr-placement:
     command: ["./placement", "-port", "50000", "-log-level", "debug"]

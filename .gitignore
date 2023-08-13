@@ -376,3 +376,7 @@ MigrationBackup/
 # macOS files
 .DS_Store
 /src/Services/Identity/Identity.API/keys
+
+# Local Docker files
+
+apim-shg.conf

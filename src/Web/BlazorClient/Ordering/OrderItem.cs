@@ -13,5 +13,15 @@ public record OrderItem(
 
     public string GetFormattedTotal() => Total.ToString("0.00");
 
-    public string GetPictureUrl(Settings settings) => $"{settings.ApiGatewayUrlExternal}/c/pics/{PictureFileName}";
+    public string GetPictureUrl(Settings settings)
+    {
+        if(settings.ApiGatewayType == "APIM")
+        {
+            return $"{settings.ApiGatewayUrlExternal}/c/api/v1/catalog/items/{ProductId}/pic";      
+        }
+        else
+        {
+            return $"{settings.ApiGatewayUrlExternal}/c/pics/{PictureFileName}";
+        } 
+    } 
 }
