@@ -137,4 +137,3 @@ services:
 
   apim-shg:
     image:  mcr.microsoft.com/azure-api-management/gateway:v2
-    
