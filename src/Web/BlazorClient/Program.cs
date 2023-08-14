@@ -9,7 +9,7 @@ public class Program
 
        // builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });  //https://eshop.dev.mfgakspg.com
 
-        builder.Services.AddHttpClient<CatalogClient>(client => client.BaseAddress = new Uri("https://eshop.dev.mfgakspg.com"));
+        builder.Services.AddHttpClient<CatalogClient>(client => client.BaseAddress = new Uri("https://eshop.dev.mfgakspg.com/"));
 
         var settings = await LoadSettingsFromHostAsync(builder.Services);
         builder.Services.AddSingleton(settings);
