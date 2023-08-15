@@ -22,9 +22,8 @@ public class BasketClient
         var request = new BasketData(items);
 
         // Save items is a request to the Aggregator service.
-        var response = await _httpClient.PostAsJsonAsync(
-            "api/v1/basket/",
-            request);
+        var response = await _httpClient.PostAsJsonAsync("b/api/v1/basket/", request);  //TODO: To fix locally
+        
 
         response.EnsureSuccessStatusCode();
 

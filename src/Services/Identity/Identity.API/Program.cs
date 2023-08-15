@@ -28,11 +28,11 @@ if (!string.IsNullOrEmpty(pathBase))
     app.UsePathBase(pathBase);
 }
 
-app.Use((context, next) =>
-{
-    context.Request.Scheme = "https";
-    return next();
-});
+// app.Use((context, next) =>
+// {
+//     context.Request.Scheme = "https";
+//     return next();
+// });
 
 app.UseForwardedHeaders();
 
