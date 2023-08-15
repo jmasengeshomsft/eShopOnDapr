@@ -1,4 +1,6 @@
-﻿var appName = "Identity API";
+﻿using Microsoft.AspNetCore.Builder;
+
+var appName = "Identity API";
 var builder = WebApplication.CreateBuilder();
 
 builder.AddCustomConfiguration();
@@ -11,6 +13,7 @@ builder.AddCustomIdentityServer();
 builder.AddCustomAuthentication();
 builder.AddCustomHealthChecks();
 builder.AddCustomApplicationServices();
+builder.ConfigureForwardedHeaders();
 
 var app = builder.Build();
 
@@ -24,6 +27,14 @@ if (!string.IsNullOrEmpty(pathBase))
 {
     app.UsePathBase(pathBase);
 }
+
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https";
+    return next();
+});
+
+app.UseForwardedHeaders();
 
 app.UseStaticFiles();
 
