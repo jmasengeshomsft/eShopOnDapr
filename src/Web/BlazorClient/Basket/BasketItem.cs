@@ -13,13 +13,13 @@ public record BasketItem(
 
     public string GetPictureUrl(Settings settings) 
     {
-        if(settings.ApiGatewayType == "APIM")
+        if(settings.ApiGatewayType == "Envoy")
         {
-            return $"{settings.ApiGatewayUrlExternal}/c/api/v1/catalog/items/{ProductId}/pic"; 
+            return $"{settings.ApiGatewayUrlExternal}/c/pics/{PictureFileName}";     
         }
         else
         {
-            return $"{settings.ApiGatewayUrlExternal}/c/pics/{PictureFileName}";
-        } 
+            return $"{settings.ApiGatewayUrlExternal}/c/api/v1/catalog/items/{ProductId}/pic";
+        }     
     }
 }

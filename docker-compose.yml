@@ -135,5 +135,5 @@ services:
   dapr-placement:
     image: "daprio/dapr:1.9.4"
 
-  apim-shg:
-    image:  mcr.microsoft.com/azure-api-management/gateway:v2
+  # apim-shg:
+  #   image:  mcr.microsoft.com/azure-api-management/gateway:v2
