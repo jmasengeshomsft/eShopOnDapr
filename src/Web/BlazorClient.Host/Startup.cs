@@ -56,7 +56,14 @@ public class Startup
                 Predicate = _ => true,
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
             });
-            endpoints.MapFallbackToFile("index.html");
+            endpoints.MapFallbackToFile("index.html", new StaticFileOptions()
+            {
+                OnPrepareResponse = ctx =>
+                {
+                    ctx.Context.Response.Cookies.Append("ai_connString", Configuration["ApplicationInsights:ConnectionString"]);
+                }
+            }     
+        );
         });
     }
 }

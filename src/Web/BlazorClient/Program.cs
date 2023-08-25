@@ -1,3 +1,5 @@
+using BlazorApplicationInsights;
+
 namespace Microsoft.eShopOnDapr.BlazorClient;
 
 public class Program
@@ -35,6 +37,20 @@ public class Program
 
             options.ProviderOptions.Authority = settings.IdentityUrlExternal;
             options.AuthenticationPaths.LogOutSucceededPath = "";
+        });
+
+        builder.Services.AddBlazorApplicationInsights(async applicationInsights =>
+        {
+            var telemetryItem = new TelemetryItem()
+            {
+                Tags = new Dictionary<string, object>()
+                {
+                    { "ai.cloud.role", "Client SPA" },
+                    { "ai.cloud.roleInstance", "Blazor Client" },
+                }
+            };
+
+            await applicationInsights.AddTelemetryInitializer(telemetryItem);
         });
 
         var host = builder.Build();

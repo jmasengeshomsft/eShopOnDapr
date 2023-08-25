@@ -71,6 +71,7 @@ services:
       - ApiGatewayType=Envoy
       - IdentityUrlExternal=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:5105
       - SeqServerUrl=http://seq
+      - APPLICATIONINSIGHTS_CONNECTION_STRING=InstrumentationKey=84f75096-9cbb-40b6-9441-e99cd39ad13f;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/
     ports:
       - "5104:80"
 
