@@ -31,8 +31,11 @@ if (!string.IsNullOrEmpty(pathBase))
 app.Use((context, next) =>
 {
     context.Request.Scheme = "https";
+    context.Request.Host = new HostString("eshop.client.mfgakspg.com");
     return next();
 });
+
+
 
 app.UseForwardedHeaders();
 
