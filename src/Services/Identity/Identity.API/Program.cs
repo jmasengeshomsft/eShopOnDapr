@@ -28,15 +28,6 @@ if (!string.IsNullOrEmpty(pathBase))
     app.UsePathBase(pathBase);
 }
 
-app.Use((context, next) =>
-{
-    context.Request.Scheme = "https";
-    context.Request.Host = new HostString("eshop.client.mfgakspg.com");
-    return next();
-});
-
-
-
 app.UseForwardedHeaders();
 
 app.UseStaticFiles();
@@ -71,6 +62,14 @@ app.UseIdentityServer();
 app.UseAuthorization();
 
 app.MapDefaultControllerRoute();
+
+app.Use((context, next) =>
+{
+    context.Request.Scheme = "https";
+    context.Request.Host = new HostString("eshop.client.mfgakspg.com");
+    return next();
+});
+
 
 app.MapHealthChecks("/hc", new HealthCheckOptions()
 {
