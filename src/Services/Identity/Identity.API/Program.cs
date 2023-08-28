@@ -4,7 +4,7 @@ var appName = "Identity API";
 var builder = WebApplication.CreateBuilder();
 
 builder.AddCustomConfiguration();
-// builder.AddApplicationInsightsTelemetry();
+builder.AddApplicationInsightsTelemetry();
 builder.AddCustomSerilog();
 builder.AddCustomMvc();
 builder.AddCustomDatabase();
