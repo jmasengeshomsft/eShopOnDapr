@@ -98,6 +98,7 @@ public static class ProgramExtensions
         {
             options.ForwardedHeaders =
                 ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            options.RequireHeaderSymmetry = false;
             options.KnownNetworks.Clear();
             options.KnownProxies.Clear();
         });
