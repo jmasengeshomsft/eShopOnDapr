@@ -31,7 +31,7 @@
         if (_hubConnection == null || _hubConnection.State == HubConnectionState.Disconnected)
         {
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl($"{_settings.ApiGatewayUrlExternal}/hub/notificationhub", options =>
+                .WithUrl($"{_settings.OrderNotificationHubUrlExternal}/hub/notificationhub", options =>
                 {
                     options.AccessTokenProvider = GetAccessTokenAsync;
                 })
