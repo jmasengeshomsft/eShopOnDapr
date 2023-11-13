@@ -2,7 +2,7 @@
 ARG NET_IMAGE=7.0-bullseye-slim
 FROM mcr.microsoft.com/dotnet/aspnet:${NET_IMAGE} AS base
 WORKDIR /app
-EXPOSE 80
+EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:${NET_IMAGE} AS build
 WORKDIR /src
@@ -34,4 +34,5 @@ RUN dotnet publish --no-restore "Ordering.API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+ENV ASPNETCORE_URLS=http://*:8080
 ENTRYPOINT ["dotnet", "Ordering.API.dll"]

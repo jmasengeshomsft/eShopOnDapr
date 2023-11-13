@@ -82,6 +82,7 @@ services:
       - RetryMigrations=true
       - SeqServerUrl=http://seq
       - APPLICATIONINSIGHTS_CONNECTION_STRING=<value>
+      
     ports:
       - "5101:80"
       - "50002:50001"
