@@ -46,22 +46,22 @@ namespace Microsoft.eShopOnDapr.Services.Catalog.API.Infrastructure.Migrations
 
                     b.ToTable("CatalogBrand");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = ".NET"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Dapr"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Other"
-                        });
+                    // b.HasData(
+                    //     new
+                    //     {
+                    //         Id = 1,
+                    //         Name = ".NET"
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 2,
+                    //         Name = "Dapr"
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 3,
+                    //         Name = "Other"
+                    //     });
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnDapr.Services.Catalog.API.Model.CatalogItem", b =>
@@ -102,177 +102,177 @@ namespace Microsoft.eShopOnDapr.Services.Catalog.API.Infrastructure.Migrations
 
                     b.ToTable("CatalogItem");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 5,
-                            Name = ".NET Bot Black Hoodie",
-                            PictureFileName = "1.png",
-                            Price = 19.5m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 2,
-                            Name = ".NET Black & White Mug",
-                            PictureFileName = "2.png",
-                            Price = 8.5m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            AvailableStock = 100,
-                            CatalogBrandId = 3,
-                            CatalogTypeId = 5,
-                            Name = "Prism White T-Shirt",
-                            PictureFileName = "3.png",
-                            Price = 12m
-                        },
-                        new
-                        {
-                            Id = 4,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 5,
-                            Name = ".NET Foundation T-shirt",
-                            PictureFileName = "4.png",
-                            Price = 14.99m
-                        },
-                        new
-                        {
-                            Id = 5,
-                            AvailableStock = 100,
-                            CatalogBrandId = 3,
-                            CatalogTypeId = 3,
-                            Name = "Roslyn Red Pin",
-                            PictureFileName = "5.png",
-                            Price = 8.5m
-                        },
-                        new
-                        {
-                            Id = 6,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 5,
-                            Name = ".NET Blue Hoodie",
-                            PictureFileName = "6.png",
-                            Price = 12m
-                        },
-                        new
-                        {
-                            Id = 7,
-                            AvailableStock = 100,
-                            CatalogBrandId = 3,
-                            CatalogTypeId = 5,
-                            Name = "Roslyn Red T-Shirt",
-                            PictureFileName = "7.png",
-                            Price = 12m
-                        },
-                        new
-                        {
-                            Id = 8,
-                            AvailableStock = 100,
-                            CatalogBrandId = 3,
-                            CatalogTypeId = 5,
-                            Name = "Kudu Purple Hoodie",
-                            PictureFileName = "8.png",
-                            Price = 8.5m
-                        },
-                        new
-                        {
-                            Id = 9,
-                            AvailableStock = 100,
-                            CatalogBrandId = 3,
-                            CatalogTypeId = 2,
-                            Name = "Cup<T> White Mug",
-                            PictureFileName = "9.png",
-                            Price = 12m
-                        },
-                        new
-                        {
-                            Id = 10,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 3,
-                            Name = ".NET Foundation Pin",
-                            PictureFileName = "10.png",
-                            Price = 9m
-                        },
-                        new
-                        {
-                            Id = 11,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 3,
-                            Name = "Cup<T> Pin",
-                            PictureFileName = "11.png",
-                            Price = 8.5m
-                        },
-                        new
-                        {
-                            Id = 12,
-                            AvailableStock = 100,
-                            CatalogBrandId = 3,
-                            CatalogTypeId = 5,
-                            Name = "Prism White TShirt",
-                            PictureFileName = "12.png",
-                            Price = 12m
-                        },
-                        new
-                        {
-                            Id = 13,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 2,
-                            Name = "Modern .NET Black & White Mug",
-                            PictureFileName = "13.png",
-                            Price = 8.5m
-                        },
-                        new
-                        {
-                            Id = 14,
-                            AvailableStock = 100,
-                            CatalogBrandId = 1,
-                            CatalogTypeId = 2,
-                            Name = "Modern Cup<T> White Mug",
-                            PictureFileName = "14.png",
-                            Price = 12m
-                        },
-                        new
-                        {
-                            Id = 15,
-                            AvailableStock = 100,
-                            CatalogBrandId = 2,
-                            CatalogTypeId = 1,
-                            Name = "Dapr Cap",
-                            PictureFileName = "15.png",
-                            Price = 9.99m
-                        },
-                        new
-                        {
-                            Id = 16,
-                            AvailableStock = 100,
-                            CatalogBrandId = 2,
-                            CatalogTypeId = 5,
-                            Name = "Dapr Zipper Hoodie",
-                            PictureFileName = "16.png",
-                            Price = 14.99m
-                        },
-                        new
-                        {
-                            Id = 17,
-                            AvailableStock = 100,
-                            CatalogBrandId = 2,
-                            CatalogTypeId = 4,
-                            Name = "Dapr Logo Sticker",
-                            PictureFileName = "17.png",
-                            Price = 1.99m
-                        });
+                    // b.HasData(
+                    //     new
+                    //     {
+                    //         Id = 1,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 5,
+                    //         Name = ".NET Bot Black Hoodie",
+                    //         PictureFileName = "1.png",
+                    //         Price = 19.5m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 2,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 2,
+                    //         Name = ".NET Black & White Mug",
+                    //         PictureFileName = "2.png",
+                    //         Price = 8.5m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 3,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 3,
+                    //         CatalogTypeId = 5,
+                    //         Name = "Prism White T-Shirt",
+                    //         PictureFileName = "3.png",
+                    //         Price = 12m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 4,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 5,
+                    //         Name = ".NET Foundation T-shirt",
+                    //         PictureFileName = "4.png",
+                    //         Price = 14.99m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 5,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 3,
+                    //         CatalogTypeId = 3,
+                    //         Name = "Roslyn Red Pin",
+                    //         PictureFileName = "5.png",
+                    //         Price = 8.5m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 6,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 5,
+                    //         Name = ".NET Blue Hoodie",
+                    //         PictureFileName = "6.png",
+                    //         Price = 12m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 7,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 3,
+                    //         CatalogTypeId = 5,
+                    //         Name = "Roslyn Red T-Shirt",
+                    //         PictureFileName = "7.png",
+                    //         Price = 12m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 8,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 3,
+                    //         CatalogTypeId = 5,
+                    //         Name = "Kudu Purple Hoodie",
+                    //         PictureFileName = "8.png",
+                    //         Price = 8.5m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 9,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 3,
+                    //         CatalogTypeId = 2,
+                    //         Name = "Cup<T> White Mug",
+                    //         PictureFileName = "9.png",
+                    //         Price = 12m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 10,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 3,
+                    //         Name = ".NET Foundation Pin",
+                    //         PictureFileName = "10.png",
+                    //         Price = 9m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 11,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 3,
+                    //         Name = "Cup<T> Pin",
+                    //         PictureFileName = "11.png",
+                    //         Price = 8.5m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 12,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 3,
+                    //         CatalogTypeId = 5,
+                    //         Name = "Prism White TShirt",
+                    //         PictureFileName = "12.png",
+                    //         Price = 12m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 13,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 2,
+                    //         Name = "Modern .NET Black & White Mug",
+                    //         PictureFileName = "13.png",
+                    //         Price = 8.5m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 14,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 1,
+                    //         CatalogTypeId = 2,
+                    //         Name = "Modern Cup<T> White Mug",
+                    //         PictureFileName = "14.png",
+                    //         Price = 12m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 15,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 2,
+                    //         CatalogTypeId = 1,
+                    //         Name = "Dapr Cap",
+                    //         PictureFileName = "15.png",
+                    //         Price = 9.99m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 16,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 2,
+                    //         CatalogTypeId = 5,
+                    //         Name = "Dapr Zipper Hoodie",
+                    //         PictureFileName = "16.png",
+                    //         Price = 14.99m
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 17,
+                    //         AvailableStock = 100,
+                    //         CatalogBrandId = 2,
+                    //         CatalogTypeId = 4,
+                    //         Name = "Dapr Logo Sticker",
+                    //         PictureFileName = "17.png",
+                    //         Price = 1.99m
+                    //     });
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnDapr.Services.Catalog.API.Model.CatalogType", b =>
@@ -292,32 +292,32 @@ namespace Microsoft.eShopOnDapr.Services.Catalog.API.Infrastructure.Migrations
 
                     b.ToTable("CatalogType");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Cap"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "Mug"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Pin"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "Sticker"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "T-Shirt"
-                        });
+                    // b.HasData(
+                    //     new
+                    //     {
+                    //         Id = 1,
+                    //         Name = "Cap"
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 2,
+                    //         Name = "Mug"
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 3,
+                    //         Name = "Pin"
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 4,
+                    //         Name = "Sticker"
+                    //     },
+                    //     new
+                    //     {
+                    //         Id = 5,
+                    //         Name = "T-Shirt"
+                    //     });
                 });
 
             modelBuilder.Entity("Microsoft.eShopOnDapr.Services.Catalog.API.Model.CatalogItem", b =>

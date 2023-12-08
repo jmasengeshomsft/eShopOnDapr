@@ -1,4 +1,5 @@
 ﻿// Only use in this file to avoid conflicts with Microsoft.Extensions.Logging
+using System.Text.Json;
 using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using Serilog;
@@ -87,6 +88,16 @@ public static class ProgramExtensions
         var context = scope.ServiceProvider.GetRequiredService<CatalogDbContext>();
 
         retryPolicy.Execute(context.Database.Migrate);
+
+        //seed data using seedAIData method if there is an environment variable called DATA_FOLDER and a flag called SEED_AI_DATA
+        // if (bool.TryParse(app.Configuration["SeedAIData"], out bool seedAIData) && seedAIData)
+        // {
+        //     SeedAIData(context, app.Configuration);
+        // }
+        var aiDataFolder = Environment.GetEnvironmentVariable("DATA_FOLDER");
+        var fullPath = Path.Combine(app.Environment.ContentRootPath, aiDataFolder);
+        SeedAIData(context, fullPath);
+        
     }
 
     private static Policy CreateRetryPolicy(IConfiguration configuration, Serilog.ILogger logger)
@@ -113,6 +124,26 @@ public static class ProgramExtensions
 
         return Policy.NoOp();
     }
+
+    //create a method to seed the data in the database using the data from the /misc/data folder
+    private static void SeedAIData(CatalogDbContext context, string path)
+    {
+        //read the data under the aiDataFolder/brands as json and convert it to the CatalogBrand class
+        var brands = JsonSerializer.Deserialize<List<CatalogBrand>>(
+            File.ReadAllText(Path.Combine(path, "brands.json")));
+     
+        var types = JsonSerializer.Deserialize<List<CatalogType>>(
+            File.ReadAllText(Path.Combine(path, "types.json")));
+
+        var items = JsonSerializer.Deserialize<List<CatalogItem>>(
+            File.ReadAllText(Path.Combine(path, "items.json")));
+
+        context.CatalogBrands.AddRange(brands);
+        context.CatalogTypes.AddRange(types);
+        context.CatalogItems.AddRange(items);
+
+        context.SaveChanges();
+    }
 }
 
 
@@ -128,3 +159,5 @@ public class MyTelemetryInitializer : ITelemetryInitializer
         }
     }
 }
+
+//create a method to seed the data in the database

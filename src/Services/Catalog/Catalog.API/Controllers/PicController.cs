@@ -33,7 +33,9 @@ public class PicController : ControllerBase
         {
             var webRoot = _env.ContentRootPath;
             Console.WriteLine("The root path is{0}", webRoot);
-            var path = Path.Combine(_env.ContentRootPath, "Pics", item.PictureFileName);
+            //get the image file path from environment variables if available or use "Pics" folder
+            var picFolder = Environment.GetEnvironmentVariable("PICS_FOLDER") ?? "Pics";
+            var path = Path.Combine(_env.ContentRootPath, picFolder, item.PictureFileName);
             Console.WriteLine("The root path is{0}", path); 
             string imageFileExtension = Path.GetExtension(item.PictureFileName);
             string mimetype = GetImageMimeTypeFromImageFileExtension(imageFileExtension);

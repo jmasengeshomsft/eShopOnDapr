@@ -26,9 +26,12 @@ if (!string.IsNullOrEmpty(pathBase))
     app.UsePathBase(pathBase);
 }
 
+var picFolder = Environment.GetEnvironmentVariable("PICS_FOLDER") ?? "Pics";
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Pics")),
+    //The folder for pics should come from environment variables or use "Pics" folder
+
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, picFolder)),
     RequestPath = "/pics"
 });
 

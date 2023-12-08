@@ -16,11 +16,11 @@ public class CatalogTypeEntityTypeConfiguration : IEntityTypeConfiguration<Catal
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.HasData(
-            new CatalogType(1, "Cap"),
-            new CatalogType(2, "Mug"),
-            new CatalogType(3, "Pin"),
-            new CatalogType(4, "Sticker"),
-            new CatalogType(5, "T-Shirt"));
+        // builder.HasData(
+        //     new CatalogType(1, "Cap"),
+        //     new CatalogType(2, "Mug"),
+        //     new CatalogType(3, "Pin"),
+        //     new CatalogType(4, "Sticker"),
+        //     new CatalogType(5, "T-Shirt"));
     }
 }

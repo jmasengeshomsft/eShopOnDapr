@@ -16,9 +16,9 @@ public class CatalogBrandEntityTypeConfiguration : IEntityTypeConfiguration<Cata
             .IsRequired()
             .HasMaxLength(100);
 
-        builder.HasData(
-            new CatalogBrand(1, ".NET"),
-            new CatalogBrand(2, "Dapr"),
-            new CatalogBrand(3, "Other"));
+        // builder.HasData(
+        //     new CatalogBrand(1, ".NET"),
+        //     new CatalogBrand(2, "Dapr"),
+        //     new CatalogBrand(3, "Other"));
     }
 }
