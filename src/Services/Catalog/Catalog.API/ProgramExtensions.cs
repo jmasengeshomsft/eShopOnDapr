@@ -138,6 +138,13 @@ public static class ProgramExtensions
         var items = JsonSerializer.Deserialize<List<CatalogItem>>(
             File.ReadAllText(Path.Combine(path, "items.json")));
 
+
+        //insert if no data exists in the database
+        if (context.CatalogBrands.Any() || context.CatalogTypes.Any() || context.CatalogItems.Any())
+        {
+            return;
+        }
+        
         context.CatalogBrands.AddRange(brands);
         context.CatalogTypes.AddRange(types);
         context.CatalogItems.AddRange(items);

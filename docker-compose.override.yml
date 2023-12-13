@@ -82,15 +82,19 @@ services:
       - RetryMigrations=true
       - SeqServerUrl=http://seq
       - APPLICATIONINSIGHTS_CONNECTION_STRING=<ai value>
-      - PICS_FOLDER=Photos
-      - DATA_FOLDER=AIdata
+      - PICS_FOLDER=StoreData
+      - DATA_FOLDER=StoreData
     volumes:
-      - ./misc/Photos:/app/Photos
-      - ./misc/Data:/app/AIdata
-      
+      - catalog_data:/app/StoreData:ro
     ports:
       - "5101:80"
       - "50002:50001"
+
+  catalog-aigen:
+    env_file:
+      - "./src/Services/Catalog/Catalog.AIGEN/.env"
+    volumes:
+      - catalog_data:/app/Images:rw
 
   catalog-api-dapr:
     command: ["./daprd",
@@ -262,6 +266,8 @@ volumes:
   eshop-nosqldata:
     external: false
   eshop-basketdata:
+    external: false
+  catalog_data:
     external: false
   
 

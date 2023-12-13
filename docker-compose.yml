@@ -50,6 +50,12 @@ services:
     depends_on:
       - sqldata
 
+  catalog-aigen:
+    image: ${REGISTRY:-eshopdapr}/catalog.aigen:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/Services/Catalog/Catalog.AIGEN/Dockerfile
+
   catalog-api-dapr:
     image: "daprio/daprd:1.9.4"
     network_mode: "service:catalog-api"

@@ -10,7 +10,11 @@ data:
   ASPNETCORE_ENVIRONMENT: Development
   ASPNETCORE_URLS: http://0.0.0.0:80
   SeqServerUrl: http://seq
-
+  PICS_FOLDER: StoreData
+  DATA_FOLDER: StoreData
+  AzureOpenAiServiceEndpoint: https://cog-ckyant4wtqgt2.openai.azure.com/
+  AzureOpenAiServiceKey: f74d77b4f9ed479282bd605bd6e14195
+  LocalImageFolder: StoreData
 ---
 
 kind: Deployment
@@ -38,6 +42,20 @@ spec:
         dapr.io/config: "dapr-config"
         dapr.io/log-as-json: "true"
     spec:
+      dnsConfig:
+        options:
+          - name: edns0
+      #Add init containers and run eshopdapr/eshop.init:latest
+      initContainers:
+        - name: catalog-product-gen
+          image: eshopdapr/catalog.aigen:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: catalog-cm
+          volumeMounts:
+            - name: storedata
+              mountPath: /app/StoreData
       containers:
         - name: catalog-api
           image: eshopdapr/catalog.api:latest
@@ -56,9 +74,14 @@ spec:
               port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
-
+          volumeMounts:
+            - name: storedata
+              mountPath: /app/StoreData
+      volumes:
+        - name: storedata
+          persistentVolumeClaim:
+            claimName: storedata
 ---
-
 kind: Service
 apiVersion: v1
 metadata:
@@ -83,3 +106,41 @@ spec:
       name: dapr-grpc
   selector:
     service: catalog
+
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass 
+metadata:   
+  name: manual 
+provisioner: docker.io/hostpath
+--- 
+#
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: storedata
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 256Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: /Users/jmasengesho/Documents/workspace/eshop/eShopOnDapr/misc/k8s
+  persistentVolumeReclaimPolicy: Retain
+---
+# PersistentVolumeClaim
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: storedata
+  namespace: {{ .Values.namespace }}
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 256Mi
