@@ -12,9 +12,13 @@ data:
   SeqServerUrl: http://seq
   PICS_FOLDER: StoreData
   DATA_FOLDER: StoreData
-  AzureOpenAiServiceEndpoint: https://cog-ckyant4wtqgt2.openai.azure.com/
-  AzureOpenAiServiceKey: f74d77b4f9ed479282bd605bd6e14195
   LocalImageFolder: StoreData
+  AIProducctGeneratorPrompt: Suggest 5 programming languages. 
+                             For each, create two merchandise items that could be sold on an ecommerce website store. 
+                             Each merchandise should have a short cool name, description and type like mug, shirt or hoodie. Use the description and create a prompt for each merchandise item that can be used to generate an image. The prompt should be a short sentence that describes the merchandise item. 
+                             All the background for the image should be transparent. Return a valid json object called suggestions containing each suggestion with a random integer id [id], a name [name], and a list of uniquely identifiable merchandise items [merchandises] for that suggestion. 
+                             Each merchandize has the service name [brand], name [name], description [description], a prompt [prompt], a type [type], a global random unique integer id [id], a decimal price [price] and an integer stock [availableStock] to each merchandise item.
+
 ---
 
 kind: Deployment
@@ -50,7 +54,10 @@ spec:
         - name: catalog-product-gen
           image: eshopdapr/catalog.aigen:latest
           imagePullPolicy: IfNotPresent
+          #add env from a secret called azureopenai-secret
           envFrom:
+            - secretRef:
+                name: azureopenai-credentials       
             - configMapRef:
                 name: catalog-cm
           volumeMounts:
@@ -64,7 +71,7 @@ spec:
             - containerPort: 80
               protocol: TCP
             - containerPort: 81
-              protocol: TCP
+              protocol: 
           envFrom:
             - configMapRef:
                 name: catalog-cm
