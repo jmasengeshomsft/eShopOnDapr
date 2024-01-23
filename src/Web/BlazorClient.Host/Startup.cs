@@ -60,7 +60,7 @@ public class Startup
             {
                 OnPrepareResponse = ctx =>
                 {
-                    ctx.Context.Response.Cookies.Append("ai_connString", Configuration["ApplicationInsights:ConnectionString"]);
+                    ctx.Context.Response.Cookies.Append("ai_connString", Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
                 }
             }     
         );
