@@ -49,6 +49,9 @@ public static class ProgramExtensions
     {
         builder.Services.AddApplicationInsightsTelemetry();
         builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
+
+        //add telemetry enchricher for kubernetes
+         builder.Services.AddApplicationInsightsKubernetesEnricher(applyOptions: null);
     }
         
 
