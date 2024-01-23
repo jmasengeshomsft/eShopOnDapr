@@ -23,11 +23,14 @@ namespace EshopOnAI.ProductGenerator.Services
                 new ImageGenerationOptions()
                 {
                     Prompt = prompt,
-                    Size = ImageSize.Size256x256,
+                    Size = ImageSize.S256x256,
                 });
 
             // Image Generations responses provide URLs you can use to retrieve requested images
             Uri imageUri = imageGenerations.Value.Data[0].Url;
+
+            //save this image to a azure blob
+            
 
             return imageUri;
         }
@@ -54,6 +57,7 @@ namespace EshopOnAI.ProductGenerator.Services
 
                 return filePath;
             }
-        }
+        }     //create a method to upload the image to azure b
+    
     }
 }

@@ -13,7 +13,7 @@ data:
   PICS_FOLDER: StoreData
   DATA_FOLDER: StoreData
   LocalImageFolder: StoreData
-  AIProducctGeneratorPrompt: Suggest 5 programming languages. 
+  AIProducctGeneratorPrompt: Suggest 5 Azure cloud native services. 
                              For each, create two merchandise items that could be sold on an ecommerce website store. 
                              Each merchandise should have a short cool name, description and type like mug, shirt or hoodie. Use the description and create a prompt for each merchandise item that can be used to generate an image. The prompt should be a short sentence that describes the merchandise item. 
                              All the background for the image should be transparent. Return a valid json object called suggestions containing each suggestion with a random integer id [id], a name [name], and a list of uniquely identifiable merchandise items [merchandises] for that suggestion. 
@@ -52,7 +52,7 @@ spec:
       #Add init containers and run eshopdapr/eshop.init:latest
       initContainers:
         - name: catalog-product-gen
-          image: eshopdapr/catalog.aigen:latest
+          image: jmaksdemoacr01.azurecr.io/catalog.aigen:latest
           imagePullPolicy: IfNotPresent
           #add env from a secret called azureopenai-secret
           envFrom:
@@ -65,7 +65,7 @@ spec:
               mountPath: /app/StoreData
       containers:
         - name: catalog-api
-          image: eshopdapr/catalog.api:latest
+          image: jmaksdemoacr01.azurecr.io/catalog.api-genai:latest
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
@@ -85,9 +85,12 @@ spec:
             - name: storedata
               mountPath: /app/StoreData
       volumes:
+        # - name: storedata
+        #   persistentVolumeClaim:
+        #     claimName: {{ .Values.catalog.catalogDataPVC }}
         - name: storedata
-          persistentVolumeClaim:
-            claimName: storedata
+          emptyDir:
+            sizeLimit: 1Gi
 ---
 kind: Service
 apiVersion: v1
@@ -114,40 +117,42 @@ spec:
   selector:
     service: catalog
 
----
-apiVersion: storage.k8s.io/v1
-kind: StorageClass 
-metadata:   
-  name: manual 
-provisioner: docker.io/hostpath
---- 
-#
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: storedata
-  labels:
-    type: local
-spec:
-  storageClassName: manual
-  capacity:
-    storage: 256Mi
-  accessModes:
-    - ReadWriteMany
-  hostPath:
-    path: /Users/jmasengesho/Documents/workspace/eshop/eShopOnDapr/misc/k8s
-  persistentVolumeReclaimPolicy: Retain
----
+# ---
+# apiVersion: storage.k8s.io/v1
+# kind: StorageClass 
+# metadata:   
+#   name: manual 
+# provisioner: docker.io/hostpath
+# --- 
+# #
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: storedata
+#   labels:
+#     type: local
+# spec:
+#   storageClassName: manual
+#   capacity:
+#     storage: 256Mi
+#   accessModes:
+#     - ReadWriteMany
+#   hostPath:
+#     path: /Users/jmasengesho/Documents/workspace/eshop/eShopOnDapr/misc/k8s
+#   persistentVolumeReclaimPolicy: Retain
+
+# ---
 # PersistentVolumeClaim
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: storedata
-  namespace: {{ .Values.namespace }}
-spec:
-  storageClassName: manual
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 256Mi
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: storedata
+#   namespace: {{ .Values.namespace }}
+# spec:
+#   storageClassName: manual
+#   accessModes:
+#     - ReadWriteMany
+#   resources:
+#     requests:
+#       storage: 256Mi
+

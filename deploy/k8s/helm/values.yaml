@@ -3,3 +3,6 @@ namespace: eshopondapr
 
 # Name of host where eShopOnDapr can be accessed.
 hostName: localhost
+
+catalog:
+  catalogDataPVC: azurefile-eshop-pvc
