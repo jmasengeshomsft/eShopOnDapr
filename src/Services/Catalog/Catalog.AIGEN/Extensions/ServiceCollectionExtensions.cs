@@ -39,13 +39,15 @@ internal static class ServiceCollectionExtensions
         {
             var config = sp.GetRequiredService<IConfiguration>();
             var azureOpenAiServiceEndpoint = config["AzureOpenAiServiceEndpoint"];
-            var azureOpenAiServiceKey = config["AzureOpenAiServiceKey"];
+            // azureOpenAiServiceKey = config["AzureOpenAiServiceKey"];
 
             ArgumentNullException.ThrowIfNullOrEmpty(azureOpenAiServiceEndpoint);
-            ArgumentNullException.ThrowIfNullOrEmpty(azureOpenAiServiceKey);
+            // ArgumentNullException.ThrowIfNullOrEmpty(azureOpenAiServiceKey);
 
-            var openAIClient = new OpenAIClient(
-                new Uri(azureOpenAiServiceEndpoint), new AzureKeyCredential(azureOpenAiServiceKey));
+            // var openAIClient = new OpenAIClient(
+            //     new Uri(azureOpenAiServiceEndpoint), new AzureKeyCredential(azureOpenAiServiceKey));
+
+            var openAIClient = new OpenAIClient(new Uri(azureOpenAiServiceEndpoint), s_azureCredential);
 
             return openAIClient;
         });

@@ -24,10 +24,8 @@ namespace EshopOnAI.ProductGenerator.Services
                 DeploymentName = "chat",
                 Messages = 
                 {
-                    
-                    new ChatMessage(ChatRole.System, "You are an agent that helps people to design merchandise for their ecommerce store. Your response is passed to other system as valid JSON"),
-                    //new ChatMessage(ChatRole.System, "You are an agent that helps people to design merchandise for their ecommerce store. Your response is passed to other system as valid JSON"),
-                    new ChatMessage(ChatRole.User, prompt)
+                    new ChatRequestSystemMessage("You are an agent that helps people to design merchandise for their ecommerce store. Your response is passed to other system as valid JSON"),
+                    new ChatRequestUserMessage(prompt)
                 }
             });
 

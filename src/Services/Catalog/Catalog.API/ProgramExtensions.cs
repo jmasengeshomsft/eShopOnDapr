@@ -145,8 +145,13 @@ public static class ProgramExtensions
             return;
         }
         
+       // context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogBrands");
         context.CatalogBrands.AddRange(brands);
+
+       // context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogTypes");
         context.CatalogTypes.AddRange(types);
+
+        //context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogItems");
         context.CatalogItems.AddRange(items);
 
         context.SaveChanges();

@@ -1,0 +1,106 @@
+name: catalog-api
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - feature/add-ai-service
+
+    paths:
+    - src/BuildingBlocks/**
+    - src/Services/Catalog/**
+    - .github/workflows/catalog-api.yml
+  
+  pull_request:
+    branches:
+    - feature/add-ai-service
+    
+    paths:
+    - src/BuildingBlocks/**
+    - src/Services/Catalog/**
+    - .github/workflows/catalog-api.yml
+env:
+  SERVICE: catalog-api-ai
+  IMAGE: catalog.api.ai
+  DOTNET_VERSION: 7.0.x
+  USE_DOTNET_PREVIEW: true
+
+jobs:
+
+  BuildContainersForPR_Linux:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
+
+    - name: Build and run unit tests
+      run: |
+        dotnet restore "src/Services/Catalog/Catalog.API/Catalog.API.csproj"
+        cd src/Services/Catalog/Catalog.API
+        dotnet build --no-restore
+      
+    - name: Compose build ${{ env.SERVICE }}
+      run: sudo -E docker-compose build ${{ env.SERVICE }}
+      working-directory: ./src
+      shell: bash
+      env:
+        TAG: ${{ env.BRANCH }}
+        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+
+  BuildLinux:
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'pull_request' }}
+    steps:
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
+
+    - name: Build and run unit tests
+      run: |
+        dotnet restore "src/Services/Catalog/Catalog.API/Catalog.API.csproj"
+        cd src/Services/Catalog/Catalog.API
+        dotnet build --no-restore
+
+    # - name: Enable experimental features for the Docker daemon and CLI
+    #   run: |
+    #       echo $'{\n  "experimental": true\n}' | sudo tee /etc/docker/daemon.json
+    #       mkdir -p ~/.docker
+    #       echo $'{\n  "experimental": "enabled"\n}' | sudo tee ~/.docker/config.json
+    #       sudo service docker restart
+    #       docker version -f '{{.Client.Experimental}}'
+    #       docker version -f '{{.Server.Experimental}}'
+
+    - name: 'Login to ACR'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_ENDPOINT }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+     
+    - name: Compose build ${{ env.SERVICE }}
+      run: sudo -E docker-compose build ${{ env.SERVICE }}
+      working-directory: ./src
+      shell: bash
+      env:
+        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+        TAG: 1.0.${{ github.run_number }}
+    
+    - name: Compose push ${{ env.SERVICE }}
+      run: sudo -E docker-compose push ${{ env.SERVICE }}
+      working-directory: ./src
+      shell: bash
+      env:
+        REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
+        TAG: 1.0.${{ github.run_number }}

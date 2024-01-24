@@ -18,7 +18,6 @@ data:
                              Each merchandise should have a short cool name, description and type like mug, shirt or hoodie. Use the description and create a prompt for each merchandise item that can be used to generate an image. The prompt should be a short sentence that describes the merchandise item. 
                              All the background for the image should be transparent. Return a valid json object called suggestions containing each suggestion with a random integer id [id], a name [name], and a list of uniquely identifiable merchandise items [merchandises] for that suggestion. 
                              Each merchandize has the service name [brand], name [name], description [description], a prompt [prompt], a type [type], a global random unique integer id [id], a decimal price [price] and an integer stock [availableStock] to each merchandise item.
-
 ---
 
 kind: Deployment
@@ -85,12 +84,12 @@ spec:
             - name: storedata
               mountPath: /app/StoreData
       volumes:
-        # - name: storedata
-        #   persistentVolumeClaim:
-        #     claimName: {{ .Values.catalog.catalogDataPVC }}
         - name: storedata
-          emptyDir:
-            sizeLimit: 1Gi
+          persistentVolumeClaim:
+            claimName: {{ .Values.catalog.catalogDataPVC }}
+        # - name: storedata
+        #   emptyDir:
+        #     sizeLimit: 1Gi
 ---
 kind: Service
 apiVersion: v1
@@ -117,42 +116,4 @@ spec:
   selector:
     service: catalog
 
-# ---
-# apiVersion: storage.k8s.io/v1
-# kind: StorageClass 
-# metadata:   
-#   name: manual 
-# provisioner: docker.io/hostpath
-# --- 
-# #
-# apiVersion: v1
-# kind: PersistentVolume
-# metadata:
-#   name: storedata
-#   labels:
-#     type: local
-# spec:
-#   storageClassName: manual
-#   capacity:
-#     storage: 256Mi
-#   accessModes:
-#     - ReadWriteMany
-#   hostPath:
-#     path: /Users/jmasengesho/Documents/workspace/eshop/eShopOnDapr/misc/k8s
-#   persistentVolumeReclaimPolicy: Retain
-
-# ---
-# PersistentVolumeClaim
-# apiVersion: v1
-# kind: PersistentVolumeClaim
-# metadata:
-#   name: storedata
-#   namespace: {{ .Values.namespace }}
-# spec:
-#   storageClassName: manual
-#   accessModes:
-#     - ReadWriteMany
-#   resources:
-#     requests:
-#       storage: 256Mi
 

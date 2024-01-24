@@ -23,7 +23,7 @@ namespace EshopOnAI.ProductGenerator.Services
                 new ImageGenerationOptions()
                 {
                     Prompt = prompt,
-                    Size = ImageSize.S256x256,
+                    Size = ImageSize.Size256x256,
                 });
 
             // Image Generations responses provide URLs you can use to retrieve requested images
