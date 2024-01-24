@@ -55,7 +55,7 @@ spec:
       serviceAccountName: eshop-sa
       initContainers:
         - name: catalog-product-gen
-          image: jmaksdemoacr01.azurecr.io/catalog.aigen:1.0.1
+          image: jmaksdemoacr01.azurecr.io/catalog.aigen:1.0.2
           imagePullPolicy: IfNotPresent
           #add env from a secret called azureopenai-secret
           envFrom:
