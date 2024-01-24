@@ -20,7 +20,7 @@ on:
     - src/Services/Catalog/**
     - .github/workflows/catalog-api.yml
 env:
-  SERVICE: catalog-api-ai
+  SERVICE: catalog-api
   IMAGE: catalog.api.ai
   DOTNET_VERSION: 7.0.x
   USE_DOTNET_PREVIEW: true
