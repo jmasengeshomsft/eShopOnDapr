@@ -64,9 +64,9 @@ namespace EshopOnAI.ProductGenerator
                         Console.WriteLine("Description: " + merch.description);
                         Console.WriteLine("Type: " + merch.type);
                         Console.WriteLine("Prompt: " + merch.prompt);
-                        Uri imageUri = await imageGeneratorService.GenerateImageAsync(merch.prompt);
-                        var imageBytes = await imageGeneratorService.GetImageFromUrlAsync(imageUri.ToString(), Path.Combine(Directory.GetCurrentDirectory(), config["LocalImageFolder"]), merch.id + ".png");
-                        Console.WriteLine(imageUri);
+                       // Uri imageUri = await imageGeneratorService.GenerateImageAsync(merch.prompt);
+                       // var imageBytes = await imageGeneratorService.GetImageFromUrlAsync(imageUri.ToString(), Path.Combine(Directory.GetCurrentDirectory(), config["LocalImageFolder"]), merch.id + ".png");
+                       // Console.WriteLine(imageUri);
                     }
                 }
 
