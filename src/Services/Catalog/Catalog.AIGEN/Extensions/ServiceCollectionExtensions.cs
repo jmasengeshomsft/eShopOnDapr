@@ -46,9 +46,9 @@ internal static class ServiceCollectionExtensions
 
             // var openAIClient = new OpenAIClient(
             //     new Uri(azureOpenAiServiceEndpoint), new AzureKeyCredential(azureOpenAiServiceKey));
-            var options = new OpenAIClientOptions(OpenAIClientOptions.ServiceVersion.V2023_12_01_Preview);
+           // var options = new OpenAIClientOptions(OpenAIClientOptions.ServiceVersion.V2023_12_01_Preview);
 
-            var openAIClient = new OpenAIClient(new Uri(azureOpenAiServiceEndpoint), s_azureCredential, options);
+            var openAIClient = new OpenAIClient(new Uri(azureOpenAiServiceEndpoint), s_azureCredential);
 
             return openAIClient;
         });
