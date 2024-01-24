@@ -19,12 +19,15 @@ namespace EshopOnAI.ProductGenerator.Services
 
         public async Task<Uri> GenerateImageAsync(string prompt)
         {
-            Response<ImageGenerations> imageGenerations = await _openAIClient.GetImageGenerationsAsync(
-                new ImageGenerationOptions()
-                {
-                    Prompt = prompt,
-                    Size = ImageSize.Size256x256,
-                });
+
+            var options = new ImageGenerationOptions()
+            {
+                Prompt = prompt,
+                Size = ImageSize.Size256x256,
+                DeploymentName = "dall-e-2",
+            };
+
+            Response<ImageGenerations> imageGenerations = await _openAIClient.GetImageGenerationsAsync(options);
 
             // Image Generations responses provide URLs you can use to retrieve requested images
             Uri imageUri = imageGenerations.Value.Data[0].Url;
