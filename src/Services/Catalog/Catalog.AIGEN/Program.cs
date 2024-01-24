@@ -36,7 +36,7 @@ namespace EshopOnAI.ProductGenerator
 
             
 
-            // Print the chat response to console:
+            // Print the chat response to console :
            //var merchandises = chatResponse.Choices.Select(choice => JsonConvert.DeserializeObject<Root>(choice.Text)).ToList();
 
            //Console.WriteLine("The number of choises is " + chatResponse.Choices.Count);
