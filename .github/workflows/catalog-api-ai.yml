@@ -1,4 +1,4 @@
-name: catalog-api
+name: catalog-api-ai
 
 on:
   workflow_dispatch:
