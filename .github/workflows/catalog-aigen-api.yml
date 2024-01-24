@@ -1,4 +1,4 @@
-name: catalog-api-ai
+name: catalog-aigen
 
 on:
   workflow_dispatch:
@@ -8,8 +8,8 @@ on:
 
     paths:
     - src/BuildingBlocks/**
-    - src/Services/Catalog/Catalog.API/**
-    - .github/workflows/catalog-api-ai.yml
+    - src/Services/Catalog/Catalog.AIGEN/**
+    - .github/workflows/catalog-aigen-api.yml
   
   pull_request:
     branches:
@@ -17,12 +17,12 @@ on:
     
     paths:
     - src/BuildingBlocks/**
-    - src/Services/Catalog/Catalog.API/**
-    - .github/workflows/catalog-api-ai.yml
+    - src/Services/Catalog/Catalog.AIGEN/**
+    - .github/workflows/catalog-aigen-api.yml
 env:
-  SERVICE: catalog-api
-  IMAGE: catalog.api.ai
-  DOTNET_VERSION: 7.0.x
+  SERVICE: catalog-aigen
+  IMAGE: catalog.aigen
+  DOTNET_VERSION: 8.0.x
   USE_DOTNET_PREVIEW: true
 
 jobs:
@@ -42,8 +42,8 @@ jobs:
 
     - name: Build and run unit tests
       run: |
-        dotnet restore "src/Services/Catalog/Catalog.API/Catalog.API.csproj"
-        cd src/Services/Catalog/Catalog.API
+        dotnet restore "src/Services/Catalog/Catalog.AIGEN/product-generator.csproj" 
+        cd src/Services/Catalog/Catalog.AIGEN
         dotnet build --no-restore
       
     - name: Compose build ${{ env.SERVICE }}
@@ -69,8 +69,8 @@ jobs:
 
     - name: Build and run unit tests
       run: |
-        dotnet restore "src/Services/Catalog/Catalog.API/Catalog.API.csproj"
-        cd src/Services/Catalog/Catalog.API
+        dotnet restore "src/Services/Catalog/Catalog.AIGEN/product-generator.csproj"
+        cd src/Services/Catalog/Catalog.AIGEN
         dotnet build --no-restore
 
     # - name: Enable experimental features for the Docker daemon and CLI
@@ -95,7 +95,7 @@ jobs:
       shell: bash
       env:
         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
-        TAG: 1.0.${{ github.run_number }}.ai
+        TAG: 1.0.${{ github.run_number }}
     
     - name: Compose push ${{ env.SERVICE }}
       run: sudo -E docker-compose push ${{ env.SERVICE }}
@@ -103,4 +103,4 @@ jobs:
       shell: bash
       env:
         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
-        TAG: 1.0.${{ github.run_number }}.ai
+        TAG: 1.0.${{ github.run_number }}
