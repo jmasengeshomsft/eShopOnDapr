@@ -24,7 +24,7 @@ namespace EshopOnAI.ProductGenerator.Services
             {
                 Prompt = prompt,
                 Size = ImageSize.Size256x256,
-                DeploymentName = "dall-e-2",
+               // DeploymentName = "dall-e-2",
             };
 
             Response<ImageGenerations> imageGenerations = await _openAIClient.GetImageGenerationsAsync(options);
