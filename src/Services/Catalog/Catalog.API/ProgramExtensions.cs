@@ -139,7 +139,6 @@ public static class ProgramExtensions
             File.ReadAllText(Path.Combine(path, "items.json")));
 
 
-        //insert if no data exists in the database
         if (context.CatalogBrands.Any() || context.CatalogTypes.Any() || context.CatalogItems.Any())
         {
             return;

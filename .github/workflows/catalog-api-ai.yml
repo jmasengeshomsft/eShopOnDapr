@@ -103,4 +103,4 @@ jobs:
       shell: bash
       env:
         REGISTRY: ${{ secrets.REGISTRY_ENDPOINT }}
-        TAG: 1.0.${{ github.run_number }}
+        TAG: 1.0.${{ github.run_number }}.ai
