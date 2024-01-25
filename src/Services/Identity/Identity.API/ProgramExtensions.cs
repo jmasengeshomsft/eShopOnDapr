@@ -48,6 +48,7 @@ public static class ProgramExtensions
     public static void AddApplicationInsightsTelemetry(this WebApplicationBuilder builder)
     {
         builder.Services.AddApplicationInsightsTelemetry();
+        builder.Services.AddApplicationInsightsKubernetesEnricher(diagnosticLogLevel: LogLevel.Information);
         builder.Services.AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>();
     }
 
