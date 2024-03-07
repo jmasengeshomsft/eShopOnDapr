@@ -39,7 +39,7 @@ namespace EshopOnAI.ProductGenerator.Services
 
             Response<Completions> response = await _openAIClient.GetCompletionsAsync(new CompletionsOptions()
             {
-                DeploymentName = "gpt-35-turbo-instruct", // assumes a matching model deployment or model name
+                DeploymentName = "gpt-35-turbo-instruct", 
                 Prompts = { prompt },
                 MaxTokens = 2000
             });
