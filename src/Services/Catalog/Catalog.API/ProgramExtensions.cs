@@ -103,7 +103,6 @@ public static class ProgramExtensions
 
     private static Policy CreateRetryPolicy(IConfiguration configuration, Serilog.ILogger logger)
     {
-        // Only use a retry policy if configured to do so.
         // When running in an orchestrator/K8s, it will take care of restarting failed services.
         if (bool.TryParse(configuration["RetryMigrations"], out bool _))
         {
