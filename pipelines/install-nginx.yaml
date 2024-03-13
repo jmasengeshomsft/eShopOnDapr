@@ -30,6 +30,8 @@ variables:
     value: "aks-playground-eastus-eshop-prod-rg"
   - name: nginxNamespace
     value: "ingress-nginx"
+  - name: azureServiceConnection
+    value: "MFG-Cloud-Native-Shared-Playground"
 
 stages:
 - stage: PublishImagesToDev
