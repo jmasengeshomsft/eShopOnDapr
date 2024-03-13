@@ -1,0 +1,100 @@
+trigger: none
+
+pr: none
+
+pool: 
+  vmImage: ubuntu-latest
+
+variables:
+  - name : NugetSecurityAnalysisWarningLevel
+    value : none
+  - name : REGISTRY_NAME
+    value : "aksplaygroundglobalacr.azurecr.io"
+  - name : SOURCE_REGISTRY
+    value : "registry.k8s.io"
+  - name: CONTROLLER_IMAGE
+    value: "ingress-nginx/controller"
+  - name: CONTROLLER_TAG
+    value: "v1.8.1"
+  - name: DEFAULTBACKEND_IMAGE
+    value: "defaultbackend-amd64"
+  - name: DEFAULTBACKEND_TAG
+    value: "1.5"
+  - name: PATCH_IMAGE
+    value: "ingress-nginx/kube-webhook-certgen"
+  - name: PATCH_TAG
+    value: "v1.1.1"
+  - name: kubernetesCluster
+    value: "eshop-prodeastus-aks-01"
+  - name: azureResourceGroup
+    value: "aks-playground-eastus-eshop-prod-rg"
+  - name: nginxNamespace
+    value: "ingress-nginx"
+  - name: azureServiceConnection
+    value: "MFG-Cloud-Native-Shared-Playground"
+
+stages:
+- stage: PublishImagesToDev
+  displayName: Publish Dev Manifest
+  jobs:
+  - deployment: PublishManifest
+    environment: prod
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          # - task: HelmDeploy@0
+          #   displayName: "Install ingress-nginx (Helm repo add)"    
+          #   inputs:
+          #     connectionType: 'Azure Resource Manager'
+          #     azureSubscription: ${{ variables.azureServiceConnection }}
+          #     azureResourceGroup: '$(azureResourceGroup)'
+          #     kubernetesCluster: '$(kubernetesCluster)'
+          #     useClusterAdmin: true
+          #     command: 'repo'
+          #     arguments: 'add ingress-nginx https://kubernetes.github.io/ingress-nginx'
+
+          # - task: HelmDeploy@0
+          #   displayName: "Install ingress-nginx (Helm repo update)"    
+          #   inputs:
+          #     connectionType: 'Azure Resource Manager'
+          #     azureSubscription: ${{ variables.azureServiceConnection }}
+          #     azureResourceGroup: '$(azureResourceGroup)'
+          #     kubernetesCluster: '$(kubernetesCluster)'
+          #     useClusterAdmin: true
+          #     command: 'repo'
+          #     arguments: 'update'
+
+          # # - task: HelmDeploy@0
+          # #   displayName: "Install ingress-nginx"    
+          # #   inputs:
+          # #     connectionType: 'Azure Resource Manager'
+          # #     azureSubscription: ${{ variables.azureServiceConnection }}
+          # #     azureResourceGroup: '$(azureResourceGroup)'
+          # #     kubernetesCluster: '$(kubernetesCluster)'
+          # #     useClusterAdmin: true
+          # #     command: 'upgrade'
+          # #     chartType: 'Name'
+          # #     chartName: 'ingress-nginx/ingress-nginx'      
+          # #     releaseName: 'ingress-nginx'
+          # #     overrideValues: 'controller.replicaCount=2, controller.nodeSelector."kubernetes\.io/os"=linux ,controller.image.registry=$REGISTRY_NAME, controller.image.image=$CONTROLLER_IMAGE, controller.image.tag=$CONTROLLER_TAG, controller.image.digest=sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd, controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux, controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz, controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-internal"=true, controller.admissionWebhooks.patch.image.registry=$REGISTRY_NAME, controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE, controller.admissionWebhooks.patch.image.tag=$PATCH_TAG, controller.admissionWebhooks.patch.image.digest=sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660'
+          # #     namespace: $(nginxNamespace)
+          # #     arguments: '--create-namespace'
+
+          - task: AzureCLI@2
+            displayName: Deploy
+            inputs:
+              azureSubscription: ${{ variables.azureServiceConnection }}
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+              
+                az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster) --admin
+                # Set variable for ACR location to use for pulling images
+                ACR_URL=$(REGISTRY_NAME)
+
+                # Use Helm to deploy an NGINX ingress controller
+                cd deploy/k8s/helm
+
+                helm install --set hostName=eshopondapr.internal myeshop .
