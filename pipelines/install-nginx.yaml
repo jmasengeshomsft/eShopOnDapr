@@ -95,7 +95,7 @@ stages:
                 ACR_URL=$(REGISTRY_NAME)
 
                 # Use Helm to deploy an NGINX ingress controller
-                helm install ingress-nginx ingress-nginx/ingress-nginx \
+                helm install ingress ingress-nginx/ingress-nginx \
                     --version 4.7.1 \
                     --namespace ingress-nginx \
                     --create-namespace \
