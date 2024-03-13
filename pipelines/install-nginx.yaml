@@ -2,8 +2,8 @@ trigger: none
 
 pr: none
 
-pool:
-  name: ubuntu-latest
+pool: 
+  vmImage: ubuntu-latest
 
 variables:
   - name : NugetSecurityAnalysisWarningLevel
