@@ -1,0 +1,152 @@
+trigger: none
+
+pr: none
+
+pool:
+  name: np-devops-agent-pool-ubuntu2204
+
+parameters:
+- name: azureDevOpsEnvironment
+  displayName: 'Azure DevOps Environment'
+  type: string
+  default: 'KMC KomatsuOMP_TrustZone_DEV'
+  values:
+  - KMC KomatsuOMP_TrustZone_DEV
+  - PRE-PRODUCTION PIPELINE ENVIRONMENT PLACEHOLDER
+  - PRODUCTION PIPELINE ENVIRONMENT PLACEHOLDER
+- name: regionCode
+  displayName: 'Region Code for Deployment'
+  type: string
+  values:
+  - GL
+  - AP
+  - AU
+  - NA
+  - EA
+  - SA
+
+variables:
+  - template: templates/trust-zone-service-connection.yaml
+    parameters:
+      azureDevOpsEnvironment: ${{ parameters.azureDevOpsEnvironment }}
+ 
+  - name : NugetSecurityAnalysisWarningLevel
+    value : none
+  - name : REGISTRY_NAME
+    value : "acrnpsgl.azurecr.io"
+  - name : SOURCE_REGISTRY
+    value : "registry.k8s.io"
+  - name: CONTROLLER_IMAGE
+    value: "ingress-nginx/controller"
+  - name: CONTROLLER_TAG
+    value: "v1.8.1"
+  - name: DEFAULTBACKEND_IMAGE
+    value: "defaultbackend-amd64"
+  - name: DEFAULTBACKEND_TAG
+    value: "1.5"
+  - name: PATCH_IMAGE
+    value: "ingress-nginx/kube-webhook-certgen"
+  - name: PATCH_TAG
+    value: "v1.1.1"
+  - name: kubernetesCluster
+    value: "d-aks-webservices-core-gl-hs2cayio5shlc"
+  - name: azureResourceGroup
+    value: "kmap-d-rg-tz-core-gl"
+  - name: nginxNamespace
+    value: "ingress-nginx"
+
+stages:
+- stage: PublishImagesToDev
+  displayName: Publish Dev Manifest
+  jobs:
+  - deployment: PublishManifest
+    environment: KMC KomatsuOMP_NetworkShared_NONPROD
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - checkout: self
+          - task: HelmDeploy@0
+            displayName: "Install ingress-nginx (Helm repo add)"    
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: ${{ variables.azureServiceConnection }}
+              azureResourceGroup: '$(azureResourceGroup)'
+              kubernetesCluster: '$(kubernetesCluster)'
+              useClusterAdmin: true
+              command: 'repo'
+              arguments: 'add ingress-nginx https://kubernetes.github.io/ingress-nginx'
+
+          - task: HelmDeploy@0
+            displayName: "Install ingress-nginx (Helm repo update)"    
+            inputs:
+              connectionType: 'Azure Resource Manager'
+              azureSubscription: ${{ variables.azureServiceConnection }}
+              azureResourceGroup: '$(azureResourceGroup)'
+              kubernetesCluster: '$(kubernetesCluster)'
+              useClusterAdmin: true
+              command: 'repo'
+              arguments: 'update'
+
+          # - task: HelmDeploy@0
+          #   displayName: "Install ingress-nginx"    
+          #   inputs:
+          #     connectionType: 'Azure Resource Manager'
+          #     azureSubscription: ${{ variables.azureServiceConnection }}
+          #     azureResourceGroup: '$(azureResourceGroup)'
+          #     kubernetesCluster: '$(kubernetesCluster)'
+          #     useClusterAdmin: true
+          #     command: 'upgrade'
+          #     chartType: 'Name'
+          #     chartName: 'ingress-nginx/ingress-nginx'      
+          #     releaseName: 'ingress-nginx'
+          #     overrideValues: 'controller.replicaCount=2, controller.nodeSelector."kubernetes\.io/os"=linux ,controller.image.registry=$REGISTRY_NAME, controller.image.image=$CONTROLLER_IMAGE, controller.image.tag=$CONTROLLER_TAG, controller.image.digest=sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd, controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux, controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz, controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-internal"=true, controller.admissionWebhooks.patch.image.registry=$REGISTRY_NAME, controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE, controller.admissionWebhooks.patch.image.tag=$PATCH_TAG, controller.admissionWebhooks.patch.image.digest=sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660'
+          #     namespace: $(nginxNamespace)
+          #     arguments: '--create-namespace'
+
+          - task: AzureCLI@2
+            displayName: Deploy
+            inputs:
+              azureSubscription: ${{ variables.azureServiceConnection }}
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+              
+                az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster) --admin
+                # Set variable for ACR location to use for pulling images
+                ACR_URL=$(REGISTRY_NAME)
+
+                # Use Helm to deploy an NGINX ingress controller
+                helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
+                    --version 4.7.1 \
+                    --namespace ingress-nginx \
+                    --create-namespace \
+                    --set controller.replicaCount=2 \
+                    --set controller.nodeSelector."kubernetes\.io/os"=linux \
+                    --set controller.image.registry=$ACR_URL \
+                    --set controller.image.image=$CONTROLLER_IMAGE \
+                    --set controller.image.tag=$CONTROLLER_TAG \
+                    --set controller.image.digest="sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd" \
+                    --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux \
+                    --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
+                    --set controller.service.externalTrafficPolicy=Local \
+                    --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-internal"=true \
+                    --set controller.admissionWebhooks.patch.image.registry=$ACR_URL \
+                    --set controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE \
+                    --set controller.admissionWebhooks.patch.image.tag=$PATCH_TAG \
+                    --set controller.admissionWebhooks.patch.image.digest="sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660"
+
+                # update the default config map
+                kubectl apply -f pipelines/nginx-configmap.yaml -n $(nginxNamespace)
+
+          - task: AzureCLI@2
+            displayName: Deploy
+            inputs:
+              azureSubscription: ${{ variables.azureServiceConnection }}
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az aks get-credentials --resource-group $(azureResourceGroup) --name $(kubernetesCluster) --admin
+
+                # update the default config map
+                kubectl apply -f pipelines/nginx-configmap.yaml -n $(nginxNamespace)
