@@ -1,0 +1,62 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# yaml file for develop/master branches build
+trigger: none
+  # branches:
+  #   include:
+  #   - main
+
+pr: none
+
+pool: 
+  vmImage: ubuntu-latest
+variables:
+  - name: azureServiceConnection
+    value: MFG-Cloud-Native-Shared-Playground
+  - name : NugetSecurityAnalysisWarningLevel
+    value : none
+  - name : REGISTRY_NAME
+    value : "aksplaygroundglobalacr.azurecr.io"
+  - name : SOURCE_REGISTRY
+    value : "registry.k8s.io"
+  - name: CONTROLLER_IMAGE
+    value: "ingress-nginx/controller"
+  - name: CONTROLLER_TAG
+    value: "v1.2.1"
+  - name: DEFAULTBACKEND_IMAGE
+    value: "defaultbackend-amd64"
+  - name: DEFAULTBACKEND_TAG
+    value: "1.5"
+  - name: PATCH_IMAGE
+    value: "ingress-nginx/kube-webhook-certgen"
+  - name: PATCH_TAG
+    value: "v1.1.1"
+
+stages:
+
+# Dev Env 
+- stage: PublishImagesToDev
+  displayName: Publish Dev Manifest
+
+  pool: 
+    vmImage: ubuntu-latest
+  jobs:
+  - deployment: PublishManifest
+    environment: dev
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          #Build and Push Image
+          - task: AzureCLI@2
+            displayName: Pull and Push
+            inputs:
+              azureSubscription: $(azureServiceConnection)
+              scriptType: bash
+              scriptLocation: inlineScript
+              inlineScript: |
+                az acr import --name $(REGISTRY_NAME) --source $(SOURCE_REGISTRY)/$(CONTROLLER_IMAGE):$(CONTROLLER_TAG) --image $(CONTROLLER_IMAGE):dev
+                az acr import --name $(REGISTRY_NAME) --source $(SOURCE_REGISTRY)/$(PATCH_IMAGE):$(PATCH_TAG) --image $(PATCH_IMAGE):dev
+                az acr import --name $(REGISTRY_NAME) --source $(SOURCE_REGISTRY)/$(DEFAULTBACKEND_IMAGE):$(DEFAULTBACKEND_TAG) --image $(DEFAULTBACKEND_IMAGE):dev
