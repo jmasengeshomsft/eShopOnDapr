@@ -104,12 +104,10 @@ stages:
                     --set controller.image.registry=$ACR_URL \
                     --set controller.image.image=$CONTROLLER_IMAGE \
                     --set controller.image.tag=$CONTROLLER_TAG \
-                    --set controller.image.digest="sha256:e5c4824e7375fcf2a393e1c03c293b69759af37a9ca6abdb91b13d78a93da8bd" \
                     --set controller.admissionWebhooks.patch.nodeSelector."kubernetes\.io/os"=linux \
                     --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
                     --set controller.service.externalTrafficPolicy=Local \
                     --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-internal"=true \
                     --set controller.admissionWebhooks.patch.image.registry=$ACR_URL \
                     --set controller.admissionWebhooks.patch.image.image=$PATCH_IMAGE \
-                    --set controller.admissionWebhooks.patch.image.tag=$PATCH_TAG \
-                    --set controller.admissionWebhooks.patch.image.digest="sha256:64d8c73dca984af206adf9d6d7e46aa550362b1d7a01f3a0a91b20cc67868660"
+                    --set controller.admissionWebhooks.patch.image.tag=$PATCH_TAG 
