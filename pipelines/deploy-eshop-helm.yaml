@@ -97,4 +97,4 @@ stages:
                 # Use Helm to deploy an NGINX ingress controller
                 cd deploy/k8s/helm
 
-                helm install --set hostName=eshopondapr.internal myeshop .
+                helm upgrade --set hostName=eshopondapr.internal myeshop .
