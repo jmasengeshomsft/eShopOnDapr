@@ -24,7 +24,7 @@ variables:
   - name: CONTROLLER_IMAGE
     value: "ingress-nginx/controller"
   - name: CONTROLLER_TAG
-    value: "v1.2.1"
+    value: "v1.10.0"
   - name: DEFAULTBACKEND_IMAGE
     value: "defaultbackend-amd64"
   - name: DEFAULTBACKEND_TAG
