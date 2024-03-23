@@ -1,0 +1,31 @@
+//assign variables in variables.tf
+location                         = "eastus"
+public_network_access_enabled    = true
+private_link_enabled             = true
+resource_group_name              = "aks-playground-eastus-eshop-dev-rg"
+virtual_network_name             = "aks-playground-eastus-eshop-dev-vnet"
+private_link_subnet_name         = "sn-plendpoints"
+dns_zone_resource_group          = "aks-playground-eastus-hub-rg"
+app_prefix                       = "eshop"
+azure_aad_admin_group_ids        = ["84724c62-7f2f-495d-b70e-93634b1a38c0", "0a93f819-3797-491c-9795-434bf71bcaf9"]
+aks_cluster_name                 = "eshop-deveastus-aks"
+create_aks_federated_credentials = true
+aks_cluster_resource_group_name  = "aks-playground-eastus-eshop-dev-rg"
+rag_demo_namespace               = "eshoponcontainers"
+rag_demo_service_account         = "eshop-sa"
+deploy_new_storage_account       = false
+existing_storage_account_name    = "eshopdeveastusstrg"
+use_existing_key_vault = true
+existing_key_vault_name = "eshopdeveastuskv"
+existing_key_vault_resource_group_name = "aks-playground-eastus-eshop-dev-rg"
+#for open ai
+api_storage_account_name = "stxabgt53xtzprufunc"
+api_storage_account_resource_group = "dns-hub-rg"
+api_storage_account_container = "eshopondapr"
+api_management_name = "aks-playground-eastus-eshop-dev-apim-001"
+api_management_resource_group = "aks-playground-eastus-eshop-dev-rg"
+application_insights_name = "aks-playground-eastus-hub-ai"
+application_insights_resource_group = "aks-playground-eastus-hub-rg"
+api_auth_audience = "api://b8d309d2-1e35-4e1b-ba83-c1178f1e1f0c"
+backed_app_client_id = "b8d309d2-1e35-4e1b-ba83-c1178f1e1f0c"
+tenant_id = "16b3c013-d300-468d-ac64-7eda0820b6d3"

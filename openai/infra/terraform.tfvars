@@ -1,0 +1,20 @@
+//assign variables in variables.tf
+location                         = "eastus"
+public_network_access_enabled    = true
+private_link_enabled             = false
+resource_group_name              = "aks-demos"
+virtual_network_name             = "aks-demos-vnet"
+private_link_subnet_name         = "default"
+dns_zone_resource_group          = "aks-demos"
+app_prefix                       = "misc-rag-demo"
+azure_aad_admin_group_ids        = ["84724c62-7f2f-495d-b70e-93634b1a38c0", "0a93f819-3797-491c-9795-434bf71bcaf9"]
+aks_cluster_name                 = "eshop-deveastus-aks"
+create_aks_federated_credentials = true
+aks_cluster_resource_group_name  = "aks-demos"
+rag_demo_namespace               = "rag-demo"
+rag_demo_service_account         = "rag-demo-sa"
+deploy_new_storage_account       = false
+existing_storage_account_name    = "azuremljm8589964997"
+use_existing_key_vault = true
+existing_key_vault_name = "azuremljm0495709407"
+existing_key_vault_resource_group_name = "aks-demos"
