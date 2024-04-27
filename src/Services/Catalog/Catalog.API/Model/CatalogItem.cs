@@ -45,7 +45,7 @@ public class CatalogItem
     public int RemoveStock(int quantityDesired)
     {
         AvailableStock -= quantityDesired;
-
+        //return value
         return quantityDesired;
     }
 }

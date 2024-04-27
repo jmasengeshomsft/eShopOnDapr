@@ -21,9 +21,10 @@ namespace EshopOnAI.ProductGenerator.Services
             _blobServiceClient = blobServiceClient;
             _containerName = configuration["BlobStorage:ContainerName"];
         }
-
+    
         public async Task<Uri> UploadFileToBlobAsync(string filePath, string fileName)
         {
+            //create instances
             BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
             BlobClient blobClient = containerClient.GetBlobClient(fileName);
             await blobClient.UploadAsync(filePath, new BlobHttpHeaders { ContentType = "image/png" });
