@@ -137,11 +137,11 @@ jobs:
     - name: Update Image Version in the related HelmChart values.yaml
       uses: fjogeleit/yaml-update-action@main
       with:
-        valueFile: 'dev/eshop-values.yaml'
+        valueFile: 'dev-pg-eastus/eshop-values.yaml'
         propertyPath: 'blazorclient.image.tag'
         value: 1.0.${{ github.run_number }}
         repository: ${{ secrets.GITOPS_REPOSITORY }}
-        branch: test-pr #pr-${{ github.run_number }}
+        branch: demo-pr #pr-${{ github.run_number }}
         targetBranch: main
         createPR: true
         message: 'Update Image Version to 1.0.${{ github.run_number }}'
