@@ -29,7 +29,7 @@ namespace EshopOnAI.ProductGenerator
                             //   Return a valid json object called suggestions containing each suggestion with a random integer id [id], a name [name], and a list of uniquely identifiable merchandise items [merchandises] for that suggestion. Each merchandize has the service name [brand], name [name], description [description], a prompt [prompt], a type [type], a global random unique integer id [id], a decimal price [price] and an integer stock [availableStock] to each merchandise item.
             //                 """;
 
-            // Chat responses are returned as a list of strings.
+            // Chat responses are returned as a list of strings
             //Completions chatResponse = await chatService.GetChatResponseAsync(chatPrompt);
 
             var newResponse = await chatService.GetChatCompletionsAsync(settingPrompt);
