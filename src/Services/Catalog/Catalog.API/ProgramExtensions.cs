@@ -140,12 +140,13 @@ public static class ProgramExtensions
             File.ReadAllText(Path.Combine(path, "items.json")));
 
 
-        //make sure that all tables are truncated before seeding the data
+        //make sure that all tables are empty  before seeding the data. Do not use truncate
         if (context.CatalogBrands.Any() || context.CatalogTypes.Any() || context.CatalogItems.Any())
         {     
-            context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogBrands");
-            context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogTypes");
-            context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogItems");
+            context.Database.ExecuteSqlRaw("DELETE FROM CatalogItems");
+            context.Database.ExecuteSqlRaw("DELETE FROM CatalogTypes");
+            context.Database.ExecuteSqlRaw("DELETE FROM CatalogBrands"); 
+
             context.SaveChanges();
         }
         
