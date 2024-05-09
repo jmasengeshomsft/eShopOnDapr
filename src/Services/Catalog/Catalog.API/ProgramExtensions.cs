@@ -95,6 +95,7 @@ public static class ProgramExtensions
         // {
         //     SeedAIData(context, app.Configuration);
         // }
+
         var aiDataFolder = Environment.GetEnvironmentVariable("DATA_FOLDER");
         var fullPath = Path.Combine(app.Environment.ContentRootPath, aiDataFolder);
         SeedAIData(context, fullPath);
@@ -139,10 +140,13 @@ public static class ProgramExtensions
             File.ReadAllText(Path.Combine(path, "items.json")));
 
 
-        //insert if no data exists in the database
+        //make sure that all tables are truncated before seeding the data
         if (context.CatalogBrands.Any() || context.CatalogTypes.Any() || context.CatalogItems.Any())
-        {
-            return;
+        {     
+            context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogBrands");
+            context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogTypes");
+            context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogItems");
+            context.SaveChanges();
         }
         
        // context.Database.ExecuteSqlRaw("TRUNCATE TABLE CatalogBrands");
