@@ -143,9 +143,9 @@ public static class ProgramExtensions
         //make sure that all tables are empty  before seeding the data. Do not use truncate
         if (context.CatalogBrands.Any() || context.CatalogTypes.Any() || context.CatalogItems.Any())
         {     
-            context.CatalogItems.RemoveRange(items);
-            context.CatalogTypes.RemoveRange(types);
-            context.CatalogBrands.RemoveRange(brands);
+            context.Database.ExecuteSqlRaw($"DELETE FROM CatalogItems");
+            context.Database.ExecuteSqlRaw($"DELETE FROM CatalogTypes");
+            context.Database.ExecuteSqlRaw($"DELETE FROM CatalogBrands"); 
 
             context.SaveChanges();
         }
