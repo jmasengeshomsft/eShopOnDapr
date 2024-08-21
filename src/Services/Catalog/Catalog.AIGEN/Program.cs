@@ -30,11 +30,20 @@ namespace EshopOnAI.ProductGenerator
             //                 """;
 
             // Chat responses are returned as a list of strings.
-            //Completions chatResponse = await chatService.GetChatResponseAsync(chatPrompt);
+    
+            ChatCompletions newResponse = null;
+            try
+            {
+                newResponse = await chatService.GetChatCompletionsAsync(settingPrompt);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+                // Log the exception here
+            }
 
-            var newResponse = await chatService.GetChatCompletionsAsync(settingPrompt);
 
-            
+            Console.WriteLine("Got here at past AI");
 
             // Print the chat response to console :
            //var merchandises = chatResponse.Choices.Select(choice => JsonConvert.DeserializeObject<Root>(choice.Text)).ToList();

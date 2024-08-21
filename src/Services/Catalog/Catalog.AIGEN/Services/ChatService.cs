@@ -46,5 +46,20 @@ namespace EshopOnAI.ProductGenerator.Services
 
             return response.Value;
         }
+
+        public async Task<Completions> GetChatResponseAsync(string prompt)
+        {
+
+            Response<Completions> response = await _openAIClient.GetCompletionsAsync(new CompletionsOptions()
+            {
+                DeploymentName = "gpt-35-turbo-instruct", 
+                Prompts = { prompt },
+                MaxTokens = 2000
+            });
+
+            return response.Value;
+        }
+
+        
     }
 }
