@@ -56,6 +56,11 @@ jobs:
     #       docker version -f '{{.Client.Experimental}}'
     #       docker version -f '{{.Server.Experimental}}'
 
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose 
+
     - name: 'Login to ACR'
       uses: azure/docker-login@v1
       with:

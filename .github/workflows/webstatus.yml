@@ -67,6 +67,11 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
 
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
     - name: Build and run unit tests
       run: |
         dotnet restore "src/Web/WebStatus/WebStatus.csproj"
