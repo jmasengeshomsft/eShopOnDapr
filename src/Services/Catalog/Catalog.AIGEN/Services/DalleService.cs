@@ -3,15 +3,16 @@ using Azure;
 using Azure.AI.OpenAI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using OpenAI.Chat;
 
 namespace EshopOnAI.ProductGenerator.Services
 {
     public class DalleService : IImageGeneratorService
     {
-        private readonly OpenAIClient _openAIClient;
+        private readonly AzureOpenAIClient  _openAIClient;
         // private readonly ILogger<DalleService> _logger;
 
-        public DalleService(OpenAIClient openAIClient)
+        public DalleService(AzureOpenAIClient  openAIClient)
         {
             _openAIClient = openAIClient;
             // _logger = logger;
@@ -20,22 +21,34 @@ namespace EshopOnAI.ProductGenerator.Services
         public async Task<Uri> GenerateImageAsync(string prompt)
         {
 
-            var options = new ImageGenerationOptions()
-            {
-                Prompt = prompt,
-                Size = ImageSize.Size256x256,
-               // DeploymentName = "dall-e-3",
-            }; 
+            // var options = new ImageGenerationOptions()
+            // {
+            //     Prompt = prompt,
+            //     Size = ImageSize.Size256x256,
+            //    // DeploymentName = "dall-e-3",
+            // }; 
 
-            Response<ImageGenerations> imageGenerations = await _openAIClient.GetImageGenerationsAsync(options);
+            ImageClient chatClient = _openAIClient.GetImageClient("dalle-3");
 
-            // Image Generations responses provide URLs you can use to retrieve requested images
-            Uri imageUri = imageGenerations.Value.Data[0].Url;
+
+//             Response<ImageGenerations> imageGenerations = await _openAIClient.GetImageGenerationsAsync(options);
+// r
+//             // Image Generations responses provide URLs you can use to retrieve requested images
+//             Ui imageUri = imageGenerations.Value.Data[0].Url;
+
+
+            var imageGeneration = await chatClient.GenerateImageAsync(
+                prompt,
+                new ImageGenerationOptions()
+                {
+                    Size = GeneratedImageSize.Size256x256
+                }
+           );
 
             //save this image to a azure blob
             
 
-            return imageUri;
+            return imageGeneration.Value.ImageUri;
         }
 
         public async Task<string> GetImageFromUrlAsync(string fileUrl, string localFolderPath, string fileName)

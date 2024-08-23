@@ -35,7 +35,7 @@ internal static class ServiceCollectionExtensions
         });
 
         
-        services.AddSingleton<OpenAIClient>(sp =>
+        services.AddSingleton<AzureOpenAIClient >(sp =>
         {
             var config = sp.GetRequiredService<IConfiguration>();
             var azureOpenAiServiceEndpoint = config["AzureOpenAiServiceEndpoint"];
@@ -50,7 +50,7 @@ internal static class ServiceCollectionExtensions
 
            var creds = new AzureCliCredential();
 
-            var openAIClient = new OpenAIClient(new Uri(azureOpenAiServiceEndpoint), creds);
+            var openAIClient = new AzureOpenAIClient (new Uri(azureOpenAiServiceEndpoint), creds);
 
             return openAIClient;
         });

@@ -31,7 +31,7 @@ namespace EshopOnAI.ProductGenerator
 
             // Chat responses are returned as a list of strings.
     
-            ChatCompletions newResponse = null;
+            String newResponse = null;
             try
             {
                 newResponse = await chatService.GetChatCompletionsAsync(settingPrompt);
@@ -51,56 +51,56 @@ namespace EshopOnAI.ProductGenerator
            //Console.WriteLine("The number of choises is " + chatResponse.Choices.Count);
            
 
-            foreach (ChatChoice choice in newResponse.Choices)
-            {  
-                //Console.WriteLine("---New Utem----");
-                Console.WriteLine(choice.Message.Content);
-                var content = JsonConvert.DeserializeObject<Root>(choice.Message.Content);
-                // //generate a timestamp to use as a unique file name
+            // foreach (ChatChoice choice in newResponse.Choices)
+            // {  
+            //     //Console.WriteLine("---New Utem----");
+            //     Console.WriteLine(choice.Message.Content);
+            //     var content = JsonConvert.DeserializeObject<Root>(choice.Message.Content);
+            //     // //generate a timestamp to use as a unique file name
 
-                var imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), config["LocalImageFolder"]);
-                if (!Directory.Exists(imageFolderPath))
-                {
-                    Directory.CreateDirectory(imageFolderPath);
-                }
+            //     var imageFolderPath = Path.Combine(Directory.GetCurrentDirectory(), config["LocalImageFolder"]);
+            //     if (!Directory.Exists(imageFolderPath))
+            //     {
+            //         Directory.CreateDirectory(imageFolderPath);
+            //     }
 
-                foreach (var suggestion in content.suggestions)
-                {
-                    Console.WriteLine("Project: " + suggestion.name);
-                    foreach (var merch in suggestion.merchandises)
-                    {
-                        Console.WriteLine("Name: " + merch.name);
-                        Console.WriteLine("Description: " + merch.description);
-                        Console.WriteLine("Type: " + merch.type);
-                        Console.WriteLine("Prompt: " + merch.prompt);
-                        Uri imageUri = await imageGeneratorService.GenerateImageAsync(merch.prompt);
-                        var imageBytes = await imageGeneratorService.GetImageFromUrlAsync(imageUri.ToString(), Path.Combine(Directory.GetCurrentDirectory(), config["LocalImageFolder"]), merch.id + ".png");
-                        Console.WriteLine(imageUri);
-                    }
-                }
+            //     foreach (var suggestion in content.suggestions)
+            //     {
+            //         Console.WriteLine("Project: " + suggestion.name);
+            //         foreach (var merch in suggestion.merchandises)
+            //         {
+            //             Console.WriteLine("Name: " + merch.name);
+            //             Console.WriteLine("Description: " + merch.description);
+            //             Console.WriteLine("Type: " + merch.type);
+            //             Console.WriteLine("Prompt: " + merch.prompt);
+            //             Uri imageUri = await imageGeneratorService.GenerateImageAsync(merch.prompt);
+            //             var imageBytes = await imageGeneratorService.GetImageFromUrlAsync(imageUri.ToString(), Path.Combine(Directory.GetCurrentDirectory(), config["LocalImageFolder"]), merch.id + ".png");
+            //             Console.WriteLine(imageUri);
+            //         }
+            //     }
 
-                string fileName = $"rawcontent.json";
-                string jsonFilePath = Path.Combine(imageFolderPath, fileName);
-                //File.WriteAllText(jsonFilePath, choice.Text);
+            //     string fileName = $"rawcontent.json";
+            //     string jsonFilePath = Path.Combine(imageFolderPath, fileName);
+            //     //File.WriteAllText(jsonFilePath, choice.Text);
 
-                var brands = await catalogService.GetProjectsAsync(content.suggestions);
-                //save brands as json into a file 
-                fileName = $"brands.json";
-                jsonFilePath = Path.Combine(imageFolderPath, fileName);
-                File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(brands));
+            //     var brands = await catalogService.GetProjectsAsync(content.suggestions);
+            //     //save brands as json into a file 
+            //     fileName = $"brands.json";
+            //     jsonFilePath = Path.Combine(imageFolderPath, fileName);
+            //     File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(brands));
 
-                var types = await catalogService.GetCatalogTypesAsync(content.suggestions);
-                //save types as json into a file
-                fileName = $"types.json";
-                jsonFilePath = Path.Combine(imageFolderPath, fileName);
-                File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(types));
+            //     var types = await catalogService.GetCatalogTypesAsync(content.suggestions);
+            //     //save types as json into a file
+            //     fileName = $"types.json";
+            //     jsonFilePath = Path.Combine(imageFolderPath, fileName);
+            //     File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(types));
 
-                var items = await catalogService.GetCatalogItemsAsync(content.suggestions);
-                //save items as json into a file
-                fileName = $"items.json";
-                jsonFilePath = Path.Combine(imageFolderPath, fileName);
-                File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(items));
-            }
+            //     var items = await catalogService.GetCatalogItemsAsync(content.suggestions);
+            //     //save items as json into a file
+            //     fileName = $"items.json";
+            //     jsonFilePath = Path.Combine(imageFolderPath, fileName);
+            //     File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(items));
+            // }
         }
 
         private static ServiceProvider ConfigureServices()
