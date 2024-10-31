@@ -73,6 +73,10 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         include-prerelease: ${{ env.USE_DOTNET_PREVIEW }}
 
+    - name: Run Microsoft Security DevOps
+      uses: microsoft/security-devops-action@latest
+      id: msdo
+
     - name: Build
       run: |
         dotnet restore "src/Web/BlazorClient.Host/BlazorClient.Host.csproj"
