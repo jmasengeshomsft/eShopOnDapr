@@ -40,7 +40,7 @@ public class CatalogItem
 
     /// <summary>
     /// Simply decrement the quantity of a particular item in inventory.
-    /// We don't care if we run out of stock.
+    /// We don't care if we run out of stock
     /// </summary>
     public int RemoveStock(int quantityDesired)
     {
