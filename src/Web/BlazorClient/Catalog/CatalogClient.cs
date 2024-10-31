@@ -5,7 +5,7 @@ public class CatalogClient
     private const int PageSize = 12;
 
     private readonly HttpClient httpClient;
-
+    //
     public CatalogClient(HttpClient httpClient)
     {
         this.httpClient = httpClient;
